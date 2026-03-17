@@ -64,6 +64,7 @@ public class GameController {
         }
 
         p.setSpace(space);
+        board.IncMovecounter();
         Pnum++;
         board.setCurrentPlayer(board.getPlayer(Pnum%size));
 

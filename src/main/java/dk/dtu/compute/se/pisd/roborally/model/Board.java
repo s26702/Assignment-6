@@ -65,10 +65,13 @@ public class Board extends Subject {
 
     /** Counter for the number of moves in this new game */
     private int moveCounter = 0;
+    public void IncMovecounter(){
+        moveCounter++;
+    }
+
 
     /** getter for counter, returns the moves made */
     public int getMoveCounter() {
-
         return moveCounter;
     }
 
@@ -80,6 +83,9 @@ public class Board extends Subject {
             notifyChange();
         }
     }
+
+
+
 
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
