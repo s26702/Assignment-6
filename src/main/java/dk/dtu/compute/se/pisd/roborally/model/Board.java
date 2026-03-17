@@ -227,16 +227,19 @@ public class Board extends Subject {
         return getSpace(x, y);
     }
 
+    /** Returns a status message describing the current state of the game */
     public String getStatusMessage() {
         // this is actually a view aspect, but for making assignment V1 easy for
         // the students, this method gives a string representation of the current
         // status of the game
 
         // TODO A6a: add the move count to the status message of the board
+        return "Player = " + getCurrentPlayer().getName() + ". " + "Number of moves = " + getMoveCounter();
+
+        
         // TODO A6c: changed the status so that it shows the phase, the current player, and the current register
         //     and you can remove the move count status message message and the corresponding counter again
         // TODO A6e: add something to the status message, when a player has won the game
-        return "Player = " + getCurrentPlayer().getName() + ". " + "Number of moves = " + getMoveCounter();
-    }
 
+    }
 }
