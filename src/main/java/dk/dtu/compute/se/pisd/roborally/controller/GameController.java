@@ -66,7 +66,7 @@ public class GameController {
         p.setSpace(space);
         Pnum++;
         board.setCurrentPlayer(board.getPlayer(Pnum%size));
-
+        
     }
 
     // XXX A6c
