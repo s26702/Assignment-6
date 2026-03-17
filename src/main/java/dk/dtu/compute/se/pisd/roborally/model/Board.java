@@ -63,6 +63,27 @@ public class Board extends Subject {
     //     and add the corresponding getter and setter methods for
     //     this move counter at an appropriate place in this class.
 
+    /** Counter for the number of moves in this new game */
+    private int moveCounter = 0;
+
+    /** getter for counter, returns the moves made */
+    public int getMoveCounter() {
+
+        return moveCounter;
+    }
+
+    /** setter for the counter and gives it a value when a move is made */
+    public void setMoveCounter(int moveCounter) {
+        // only change when necessary
+        if(moveCounter != this.moveCounter) {
+            this.moveCounter = moveCounter;
+            notifyChange();
+        }
+    }
+
+
+
+
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
         this.width = width;
