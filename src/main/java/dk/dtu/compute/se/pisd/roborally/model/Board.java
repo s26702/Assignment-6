@@ -81,9 +81,6 @@ public class Board extends Subject {
         }
     }
 
-
-
-
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
         this.width = width;
@@ -239,7 +236,7 @@ public class Board extends Subject {
         // TODO A6c: changed the status so that it shows the phase, the current player, and the current register
         //     and you can remove the move count status message message and the corresponding counter again
         // TODO A6e: add something to the status message, when a player has won the game
-        return "Player = " + getCurrentPlayer().getName();
+        return "Player = " + getCurrentPlayer().getName() + ". " + "Number of moves = " + getMoveCounter();
     }
 
 }
