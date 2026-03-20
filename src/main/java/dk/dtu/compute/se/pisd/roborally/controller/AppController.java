@@ -83,9 +83,15 @@ public class AppController implements Observer {
             //     available boards, and then create the chosen board using
             //     the BoardFactory (instead of creating an empty board).
 
-            // The code below just creates an empty board with the chosen
-            // number of players on it.
-            Board board = new Board(8,8);
+            List<String> boardNames = BoardFactory.getInstance().getBoardNames();
+            ChoiceDialog<String> boardDialog = new ChoiceDialog<>(boardNames.get(0), boardNames);
+            boardDialog.setTitle("Board selection");
+            boardDialog.setHeaderText("Select a board");
+            Optional<String> boardResult = boardDialog.showAndWait();
+            if (!boardResult.isPresent()) {
+                return;
+            }
+            Board board = BoardFactory.getInstance().createBoard(boardResult.get());
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
@@ -93,6 +99,7 @@ public class AppController implements Observer {
                 board.addPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
             }
+
 
             // XXX V2
             gameController.startProgrammingPhase();

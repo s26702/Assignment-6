@@ -49,7 +49,7 @@ public class BoardFactory {
         //     return it. In case the name is null, some default board should
         //     be returned (defensive programming).
 
-            if (name == null || name.equals("Default")) {
+            if (name == null || name.equals("Simple")) {
                 return createDefaultBoard();
             } else if (name.equals("Advanced")) {
                 return createAdvancedBoard();
@@ -59,7 +59,7 @@ public class BoardFactory {
         }
 
         private Board createDefaultBoard() {
-            Board board = new Board(8, 8, "Default");
+            Board board = new Board(8, 8, "Simple");
 
         // add some walls, actions and checkpoints to some spaces
         Space space = board.getSpace(0,0);
@@ -121,7 +121,7 @@ public class BoardFactory {
 
     public java.util.List<String> getBoardNames() {
         java.util.List<String> names = new java.util.ArrayList<>();
-        names.add("Default");
+        names.add("Simple");
         names.add("Advanced");
         return names;
     }

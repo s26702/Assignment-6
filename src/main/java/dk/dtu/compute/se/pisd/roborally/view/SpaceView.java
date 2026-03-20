@@ -28,6 +28,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 /**
  * ...
@@ -90,8 +99,47 @@ public class SpaceView extends StackPane implements ViewObserver {
         if (subject == this.space) {
             this.getChildren().clear();
 
-            // TODO A6b: drawing the walls and the field action(s) on
-            //     this space could be implemented here.
+            // Draw walls
+            for (Heading wall : space.getWalls()) {
+                Pane pane = new Pane();
+                Rectangle rectangle = new Rectangle(0.0, 0.0, SPACE_WIDTH, SPACE_HEIGHT);
+                rectangle.setFill(Color.TRANSPARENT);
+                pane.getChildren().add(rectangle);
+
+                Line line = switch (wall) {
+                    case NORTH -> new Line(2, 2, SPACE_WIDTH - 2, 2);
+                    case SOUTH -> new Line(2, SPACE_HEIGHT - 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
+                    case WEST  -> new Line(2, 2, 2, SPACE_HEIGHT - 2);
+                    case EAST  -> new Line(SPACE_WIDTH - 2, 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
+                };
+                line.setStroke(Color.RED);
+                line.setStrokeWidth(5);
+                pane.getChildren().add(line);
+                this.getChildren().add(pane);
+            }
+
+            // Draw field actions
+            for (FieldAction action : space.getActions()) {
+                if (action instanceof ConveyorBelt belt) {
+                    Polygon arrow = new Polygon(
+                            2.0, 2.0,
+                            (SPACE_WIDTH - 6.0) / 2.0, SPACE_HEIGHT - 6.0,
+                            SPACE_WIDTH - 6.0, 2.0
+                    );
+                    arrow.setFill(Color.LIGHTGRAY);
+                    arrow.setStroke(Color.GREY);
+                    arrow.setRotate((90 * belt.getHeading().ordinal()) % 360);
+                    this.getChildren().add(arrow);
+                } else if (action instanceof Checkpoint checkpoint) {
+                    Circle circle = new Circle((SPACE_HEIGHT - 6) / 2.0);
+                    circle.setFill(Color.YELLOW);
+                    this.getChildren().add(circle);
+
+                    Text text = new Text("" + checkpoint.getNumber());
+                    text.setStroke(Color.BLACK);
+                    this.getChildren().add(text);
+                }
+            }
 
             updatePlayer();
         }
