@@ -96,16 +96,21 @@ public class BoardFactory {
     private Board createAdvancedBoard() {
         Board board = new Board(10, 10, "Advanced");
 
-        board.getSpace(2, 2).getWalls().add(Heading.NORTH);
-        board.getSpace(2, 2).getWalls().add(Heading.WEST);
+        Space s1 = board.getSpace(2, 2);
+        s1.getWalls().add(Heading.NORTH);
+        s1.getWalls().add(Heading.WEST);
 
-        ConveyorBelt belt = new ConveyorBelt();
-        belt.setHeading(Heading.EAST);
-        board.getSpace(1, 1).getActions().add(belt);
+        ConveyorBelt belt1 = new ConveyorBelt();
+        belt1.setHeading(Heading.EAST);
+        board.getSpace(1, 1).getActions().add(belt1);
+
+        ConveyorBelt belt2 = new ConveyorBelt();
+        belt2.setHeading(Heading.SOUTH);
+        board.getSpace(4, 1).getActions().add(belt2);
 
         return board;
     }
-}
+
 
     // TODO A6b: add a method that returns a list (of type List<String>)
     //     of all available board names. The corresponding method
@@ -114,8 +119,12 @@ public class BoardFactory {
     //     here has a proper JavaDoc documentation.
     //
 
-
-
+    public java.util.List<String> getBoardNames() {
+        java.util.List<String> names = new java.util.ArrayList<>();
+        names.add("Default");
+        names.add("Advanced");
+        return names;
+    }
 
 
 
