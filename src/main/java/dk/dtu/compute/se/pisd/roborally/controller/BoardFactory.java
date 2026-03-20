@@ -159,6 +159,7 @@ public class BoardFactory {
      * dialog, allowing the user to choose between different game arenas.
      *
      * @return a List of Strings containing all available board names
+     * @author Christoffer Sørensen
      */
     public java.util.List<String> getBoardNames() {
         java.util.List<String> names = new java.util.ArrayList<>();
