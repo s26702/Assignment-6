@@ -93,7 +93,17 @@ public class SpaceView extends StackPane implements ViewObserver {
             this.getChildren().add(arrow);
         }
     }
-
+    /**
+     * Updates the visual representation of this space whenever the underlying
+     * space model changes. Clears all existing children and redraws walls,
+     * conveyor belts, checkpoints, and the player if present.
+     *
+     * <p>Walls are drawn as red lines along the corresponding edge of the space.
+     * Conveyor belts are drawn as gray triangles pointing in their heading direction.
+     * Checkpoints are drawn as yellow circles with their number on top.</p>
+     *
+     * @param subject the subject that triggered the update, expected to be this space
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {
