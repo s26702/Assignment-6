@@ -113,7 +113,8 @@ public class BoardFactory {
      * Creates a more complex 10x10 board named "Advanced".
      *
      * This board contains more advanced features such as additional walls
-     * and conveyor belts facing different directions to increase difficulty.
+     * conveyor belts facing different directions to increase difficulty.
+     * and three different checkpoints for the players
      *
      * @return an advanced Board configuration
      */
@@ -131,6 +132,15 @@ public class BoardFactory {
         ConveyorBelt belt2 = new ConveyorBelt();
         belt2.setHeading(Heading.SOUTH);
         board.getSpace(4, 1).getActions().add(belt2);
+
+        Checkpoint checkpoint1 = new Checkpoint(1);
+        board.getSpace(3, 3).getActions().add(checkpoint1);
+
+        Checkpoint checkpoint2 = new Checkpoint(2);
+        board.getSpace(6, 6).getActions().add(checkpoint2);
+
+        Checkpoint checkpoint3 = new Checkpoint(3);
+        board.getSpace(9, 9).getActions().add(checkpoint3);
 
         return board;
     }
