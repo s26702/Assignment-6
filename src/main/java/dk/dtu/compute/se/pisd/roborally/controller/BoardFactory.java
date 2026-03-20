@@ -3,6 +3,9 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A factory for creating boards. The factory itself is implemented as a singleton.
@@ -36,13 +39,16 @@ public class BoardFactory {
         return instance;
     }
 
-    /**
-     * Creates a new board of given name of a board, which indicates
-     * which type of board should be created. For now the name is ignored.
-     *
-     * @param name the given name board
-     * @return the new board corresponding to that name
-     */
+
+    /** The default board name used as a fallback when no valid name is provided. */
+    private static final String DEFAULT_NAME = "<none>";
+
+    /** The name identifier for the simple 8x8 board. */
+    private static final String SIMPLE_BOARD_NAME = "Simple";
+
+    /** The name identifier for the advanced 10x10 board. */
+    private static final String ADVANCED_BOARD_NAME = "Advanced";
+
 
     /**
      * * This method implements a factory pattern to return different board
@@ -52,14 +58,11 @@ public class BoardFactory {
      * @return the new board corresponding to the given name
      */
     public Board createBoard(String name) {
-        // TODO A6b: Implement this method properly as described in Assignment 6b.
-        //     Dependent on the provided name, create a board accordingly and
-        //     return it. In case the name is null, some default board should
-        //     be returned (defensive programming).
-
-        if (name == null || name.equals("Simple")) {
+        if (name == null || name.equals(DEFAULT_NAME)) {
             return createDefaultBoard();
-        } else if (name.equals("Advanced")) {
+        } else if (name.equals(SIMPLE_BOARD_NAME)) {
+            return createDefaultBoard();
+        } else if (name.equals(ADVANCED_BOARD_NAME)) {
             return createAdvancedBoard();
         } else {
             return createDefaultBoard();
@@ -134,7 +137,7 @@ public class BoardFactory {
         board.getSpace(4, 1).getActions().add(belt2);
 
         Checkpoint checkpoint1 = new Checkpoint(1);
-        board.getSpace(3, 3).getActions().add(checkpoint1);
+        board.getSpace(4, 4).getActions().add(checkpoint1);
 
         Checkpoint checkpoint2 = new Checkpoint(2);
         board.getSpace(6, 6).getActions().add(checkpoint2);
@@ -160,11 +163,11 @@ public class BoardFactory {
      *
      * @return a List of Strings containing all available board names
      */
-    public java.util.List<String> getBoardNames() {
-        java.util.List<String> names = new java.util.ArrayList<>();
-        names.add("Simple");
-        names.add("Advanced");
-        return names;
+    public List<String> getBoardNames() {
+        List<String> underlyingList = new ArrayList<>();
+        underlyingList.add(SIMPLE_BOARD_NAME);
+        underlyingList.add(ADVANCED_BOARD_NAME);
+        return Collections.unmodifiableList(underlyingList);
     }
 
 
