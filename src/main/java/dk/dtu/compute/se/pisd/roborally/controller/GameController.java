@@ -45,14 +45,11 @@ public class GameController {
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-
         Player p = board.getCurrentPlayer();
         int Pnum = board.getPlayerNumber(p);
         int size = board.getPlayersNumber();
-
         for (int i = 0; i < size; i++) {
             Player other = board.getPlayer(i);
-
             if (other.getSpace().equals(space)) {
                 if (other.equals(p)) {
                     System.out.println("Space already occupied by that player");
@@ -62,12 +59,10 @@ public class GameController {
                 return;
             }
         }
-
         p.setSpace(space);
         board.IncMovecounter();
         Pnum++;
-        board.setCurrentPlayer(board.getPlayer(Pnum%size));
-
+        board.setCurrentPlayer(board.getPlayer(Pnum % size));
     }
 
     // XXX A6c
