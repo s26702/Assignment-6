@@ -49,12 +49,17 @@ public class BoardFactory {
         //     return it. In case the name is null, some default board should
         //     be returned (defensive programming).
 
-        Board board;
-        if (name == null) {
-            board = new Board(8,8, "<none>");
-        } else {
-            board = new Board(8,8, name);
+            if (name == null || name.equals("Default")) {
+                return createDefaultBoard();
+            } else if (name.equals("Advanced")) {
+                return createAdvancedBoard();
+            } else {
+                return createDefaultBoard();
+            }
         }
+
+        private Board createDefaultBoard() {
+            Board board = new Board(8, 8, "Default");
 
         // add some walls, actions and checkpoints to some spaces
         Space space = board.getSpace(0,0);
@@ -88,6 +93,19 @@ public class BoardFactory {
 
         return board;
     }
+    private Board createAdvancedBoard() {
+        Board board = new Board(10, 10, "Advanced");
+
+        board.getSpace(2, 2).getWalls().add(Heading.NORTH);
+        board.getSpace(2, 2).getWalls().add(Heading.WEST);
+
+        ConveyorBelt belt = new ConveyorBelt();
+        belt.setHeading(Heading.EAST);
+        board.getSpace(1, 1).getActions().add(belt);
+
+        return board;
+    }
+}
 
     // TODO A6b: add a method that returns a list (of type List<String>)
     //     of all available board names. The corresponding method
@@ -95,5 +113,10 @@ public class BoardFactory {
     //     names in this list. Make sure that the new method that you create
     //     here has a proper JavaDoc documentation.
     //
+
+
+
+
+
 
 }
