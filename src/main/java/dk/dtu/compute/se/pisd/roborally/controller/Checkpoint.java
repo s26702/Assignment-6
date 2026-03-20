@@ -4,11 +4,27 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
-public abstract class Checkpoint extends FieldAction {
+/**
+ * This class represents a checkpoint on the RoboRally board
+ *
+ * A checkpoint is a field action that can be placed on a {@link Space}.
+ * Each checkpoint has a unique number that indicates the order in which players must reach them
+ *
+ * Checkpoints are used to track player progress during the game.
+ * @author Mikkel Hjelm
+ */
+public class Checkpoint extends FieldAction {
 
-    private final int number;
+    private int number;
 
     public Checkpoint(int number) {
+        if(number <= 0 ) {
+            throw new IllegalArgumentException("Checkpoint number must be positive");
+        }
+        this.number = number;
+    }
+
+    public void setNumber(int number) {
         this.number = number;
     }
 
@@ -18,6 +34,6 @@ public abstract class Checkpoint extends FieldAction {
 
     @Override
     public boolean doAction(GameController gameController, Space space) {
-        return true;
+        return false;
     }
 }
