@@ -217,45 +217,42 @@ public class GameController {
         }
     }
 
-    // TODO A6c: implement this method
     public void moveForward(@NotNull Player player) {
         Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
-        if(nextspace== null) return;
-        player.setSpace(nextspace);
+        if(nextspace!= null) player.setSpace(nextspace);
 
     }
 
-    // TODO A6c: implement this method
     public void fastForward(@NotNull Player player) {
         for(int i = 0; i < 2; i++){
             Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
-            if(nextspace== null) return;
-            player.setSpace(nextspace);
+            if(nextspace != null) player.setSpace(nextspace);
         }
 
     }
 
-    // TODO A6c: implement this method
     public void turnRight(@NotNull Player player) {
-        player.setHeading(player.getHeading().prev());
+        player.setHeading(player.getHeading().next());
     }
 
-    // TODO A6c: implement this method
     public void turnLeft(@NotNull Player player) {
-        player.setHeading(player.getHeading().next());
+        player.setHeading(player.getHeading().prev());
     }
 
     public void moveBack(@NotNull Player player) {
         player.setHeading(player.getHeading().next());
         player.setHeading(player.getHeading().next());
-
         Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
-        if(nextspace == null){
+        if(nextspace != null) {
             player.setHeading(player.getHeading().next());
             player.setHeading(player.getHeading().next());
-            return;
+            player.setSpace(nextspace);
         }
-        else player.setSpace(nextspace);
+        else{
+            player.setHeading(player.getHeading().next());
+            player.setHeading(player.getHeading().next());
+        }
+
 
     }
 
