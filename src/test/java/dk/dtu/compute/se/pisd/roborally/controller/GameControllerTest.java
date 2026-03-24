@@ -82,6 +82,21 @@ class GameControllerTest {
         Assertions.assertEquals(current, board.getSpace(0, 0).getPlayer(),
                 "Player should not have moved after U-turn!");
     }
-    
+
+    /**
+     * Test that turning rights updates the heading correctly.
+     * @author Mikkel Hjelm
+     */
+
+    @Test
+    void testTurnRight() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        current.setHeading(Heading.NORTH);
+        gameController.turnRight(current);
+
+        Assertions.assertEquals(Heading.EAST, current.getHeading(), "Player should be heading EAST after turning right from NORTH");
+    }
 
 }
