@@ -71,7 +71,6 @@ class GameControllerTest {
      * Test that turning rights updates the heading correctly.
      * @author Mikkel Hjelm
      */
-
     @Test
     void testTurnRight() {
         Board board = gameController.board;
@@ -80,8 +79,16 @@ class GameControllerTest {
         current.setHeading(Heading.NORTH);
         gameController.turnRight(current);
 
-        Assertions.assertEquals(Heading.EAST, current.getHeading(), "Player should be heading EAST after turning right from NORTH");
+        Assertions.assertEquals(Heading.EAST, current.getHeading(),
+                "Player should be heading EAST after turning right from NORTH");
+        Assertions.assertEquals(current, board.getSpace(0, 0).getPlayer(),
+                "Player should not have moved after turning right!");
     }
+
+    /**
+     * Test that turning left updates the heading correctly.
+     * @author Christoffer Sørensen
+     */
 
     @Test
     void testTurnLeft() {
@@ -91,7 +98,10 @@ class GameControllerTest {
         current.setHeading(Heading.NORTH);
         gameController.turnLeft(current);
 
-        Assertions.assertEquals(Heading.WEST, current.getHeading(), "Player should be heading WEST after turning left from NORTH");
+        Assertions.assertEquals(Heading.WEST, current.getHeading(),
+                "Player should be heading WEST after turning left from NORTH");
+        Assertions.assertEquals(current, board.getSpace(0, 0).getPlayer(),
+                "Player should not have moved after turning left!");
     }
 
 }
