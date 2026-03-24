@@ -219,6 +219,14 @@ public class GameController {
 
     public void moveForward(@NotNull Player player) {
         Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
+        for(int i = 0; i < board.getPlayersNumber();i++){
+            Player currP = board.getPlayer(i);
+            if(currP.equals(player)) continue;
+            if(currP.getSpace().equals(nextspace)){
+                System.out.println("Space occupied by another player");
+                return;
+            }
+        }
         if(nextspace!= null) player.setSpace(nextspace);
 
     }
@@ -226,6 +234,14 @@ public class GameController {
     public void fastForward(@NotNull Player player) {
         for(int i = 0; i < 2; i++){
             Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
+            for(int p = 0; p < board.getPlayersNumber();p++){
+                Player currP = board.getPlayer(p);
+                if(currP.equals(player)) continue;
+                if(currP.getSpace().equals(nextspace)){
+                    System.out.println("Space occupied by another player");
+                    return;
+                }
+            }
             if(nextspace != null) player.setSpace(nextspace);
         }
 
@@ -243,6 +259,14 @@ public class GameController {
         player.setHeading(player.getHeading().next());
         player.setHeading(player.getHeading().next());
         Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
+        for(int p = 0; p < board.getPlayersNumber();p++){
+            Player currP = board.getPlayer(p);
+            if(currP.equals(player)) continue;
+            if(currP.getSpace().equals(nextspace)){
+                System.out.println("Space occupied by another player");
+                return;
+            }
+        }
         if(nextspace != null) {
             player.setHeading(player.getHeading().next());
             player.setHeading(player.getHeading().next());
