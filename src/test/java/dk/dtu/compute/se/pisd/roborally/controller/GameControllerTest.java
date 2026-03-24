@@ -3,6 +3,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import javafx.application.Platform;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,5 +105,50 @@ class GameControllerTest {
         Assertions.assertEquals(current, board.getSpace(0, 0).getPlayer(),
                 "Player should not have moved after turning left!");
     }
+    /**
+     * moveForward at the board boundary should keep the player in place (no wrap-around).
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void moveCurrentPlayerToOccupiedSpace() {
+        Board board = gameController.board;
+
+        Player player1 = board.getCurrentPlayer();
+        Player player2 = board.getPlayer(1);
+
+        // Try to move player1 to player2's space
+        gameController.moveCurrentPlayerToSpace(board.getSpace(1,1));
+
+        Assertions.assertEquals(player1, board.getSpace(0, 0).getPlayer(),
+                "Player1 should still be at (0,0) since (1,1) is occupied!");
+
+        Assertions.assertEquals(player2, board.getSpace(1, 1).getPlayer(),
+                "Player2 should still be at (1,1)!");
+
+        Assertions.assertEquals(player1, board.getCurrentPlayer(),
+                "Current player should remain player1 after a failed move!");
+    }
+
+    /**
+     * moveBack should move the player one step in the opposite direction without changing direction.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void moveBack() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer(); // at (0,0), heading SOUTH
+
+        // Move to (0,3) first so there is room to move back
+        current.setSpace(board.getSpace(0, 3));
+        Heading originalHeading = current.getHeading(); // SOUTH
+
+        gameController.moveBack(current);
+
+        Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(),
+                "Player should be one step back (northward) at (0,2)!");
+        Assertions.assertEquals(originalHeading, current.getHeading(),
+                "Heading should be restored to original after moveBack!");
+    }
+    
 
 }
