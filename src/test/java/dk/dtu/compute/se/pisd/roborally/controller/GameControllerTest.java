@@ -99,4 +99,15 @@ class GameControllerTest {
         Assertions.assertEquals(Heading.EAST, current.getHeading(), "Player should be heading EAST after turning right from NORTH");
     }
 
+    @Test
+    void testTurnLeft() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        current.setHeading(Heading.NORTH);
+        gameController.turnLeft(current);
+
+        Assertions.assertEquals(Heading.WEST, current.getHeading(), "Player should be heading WEST after turning left from NORTH");
+    }
+
 }
