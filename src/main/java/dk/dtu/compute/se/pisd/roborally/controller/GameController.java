@@ -210,8 +210,7 @@ public class GameController {
                 case UTURN:
                     this.uturn(player);
                     break;
-                // TODO A6c: add the cases for the new commands BACK and UTURN to
-                //     this case statement.
+
                 default:
                     // DO NOTHING (for now)//
             }
@@ -220,33 +219,52 @@ public class GameController {
 
     // TODO A6c: implement this method
     public void moveForward(@NotNull Player player) {
+        Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
+        if(nextspace== null) return;
+        player.setSpace(nextspace);
 
     }
 
     // TODO A6c: implement this method
     public void fastForward(@NotNull Player player) {
+        for(int i = 0; i < 2; i++){
+            Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
+            if(nextspace== null) return;
+            player.setSpace(nextspace);
+        }
 
     }
 
     // TODO A6c: implement this method
     public void turnRight(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().prev());
     }
 
     // TODO A6c: implement this method
     public void turnLeft(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().next());
     }
 
     public void moveBack(@NotNull Player player) {
+        player.setHeading(player.getHeading().next());
+        player.setHeading(player.getHeading().next());
+
+        Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
+        if(nextspace == null){
+            player.setHeading(player.getHeading().next());
+            player.setHeading(player.getHeading().next());
+            return;
+        }
+        else player.setSpace(nextspace);
 
     }
 
     public void uturn(@NotNull Player player) {
+        player.setHeading(player.getHeading().next());
+        player.setHeading(player.getHeading().next());
 
     }
 
-    // TODO A6c: Add two methods for the new commands BACK and UTURN here.
 
     /**
      * A method called when no corresponding controller operation is implemented yet.

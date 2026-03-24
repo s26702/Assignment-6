@@ -43,8 +43,8 @@ public enum Command {
     FORWARD("Fwd"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
-    FAST_FORWARD("Fast Fwd");
-    BACK("Back");
+    FAST_FORWARD("Fast Fwd"),
+    BACK("Back"),
     UTURN("U-turn");
 
 
