@@ -33,22 +33,6 @@ class GameControllerTest {
         gameController = null;
     }
 
-    /**
-     * Test for Assignment 6a (can be deleted later once Assignment 6a was shown to the teacher)
-     */
-    @Test
-    void testV1() {
-        Board board = gameController.board;
-
-        Player player1 = board.getCurrentPlayer();
-        Player player2 = board.getPlayer(1);
-        gameController.moveCurrentPlayerToSpace(board.getSpace(0, 4));
-
-        Assertions.assertEquals(player1, board.getSpace(0, 4).getPlayer(), "Player " + player1.getName() + " should be on Space (0,4)!");
-        Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
-        Assertions.assertEquals(player2, board.getCurrentPlayer(), "Current player should be " + player2.getName() +"!");
-    }
-
 
     @Test
     void moveForward() {
