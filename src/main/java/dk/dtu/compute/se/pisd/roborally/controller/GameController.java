@@ -165,6 +165,7 @@ public class GameController {
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
+                    executeFieldActions();
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
@@ -181,6 +182,24 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+    }
+
+    /**
+     * Executes all field actions for all players after one register
+     * has been completed
+     * @author Mikkel Hjelm
+     */
+    private void executeFieldActions() {
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player player = board.getPlayer(i);
+            Space space = player.getSpace();
+
+            if (space != null) {
+                for (FieldAction action : space.getActions()) {
+                    action.doAction(this, space);
+                }
+            }
         }
     }
 

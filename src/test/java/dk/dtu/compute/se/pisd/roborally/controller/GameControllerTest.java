@@ -51,10 +51,11 @@ class GameControllerTest {
 
 
     /**
-     * uturn should rotate the player 180 degrees without moving.
+     * uTurn should rotate the player 180 degrees without moving.
+     * @author Lucas Spielberg-Winther
      */
     @Test
-    void uturn() {
+    void uTurn() {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer(); // at (0,0), heading SOUTH
 
