@@ -49,7 +49,7 @@ class GameControllerTest {
         Assertions.assertEquals(player2, board.getCurrentPlayer(), "Current player should be " + player2.getName() +"!");
     }
 
-    /*
+
     @Test
     void moveForward() {
         Board board = gameController.board;
@@ -61,8 +61,53 @@ class GameControllerTest {
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
         Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
     }
-    */
+
 
     // TODO and there should be more tests added for the different assignments eventually
+
+
+    /**
+     * uturn should rotate the player 180 degrees without moving.
+     */
+    @Test
+    void uturn() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer(); // at (0,0), heading SOUTH
+
+        Heading originalHeading = current.getHeading();
+        gameController.uturn(current);
+
+        Assertions.assertEquals(originalHeading.next().next(), current.getHeading(),
+                "Heading should be reversed (180°) after U-turn!");
+        Assertions.assertEquals(current, board.getSpace(0, 0).getPlayer(),
+                "Player should not have moved after U-turn!");
+    }
+
+    /**
+     * Test that turning rights updates the heading correctly.
+     * @author Mikkel Hjelm
+     */
+
+    @Test
+    void testTurnRight() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        current.setHeading(Heading.NORTH);
+        gameController.turnRight(current);
+
+        Assertions.assertEquals(Heading.EAST, current.getHeading(), "Player should be heading EAST after turning right from NORTH");
+    }
+
+    @Test
+    void testTurnLeft() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        current.setHeading(Heading.NORTH);
+        gameController.turnLeft(current);
+
+        Assertions.assertEquals(Heading.WEST, current.getHeading(), "Player should be heading WEST after turning left from NORTH");
+    }
 
 }
