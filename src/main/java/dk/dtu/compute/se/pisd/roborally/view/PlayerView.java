@@ -41,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class PlayerView extends Tab implements ViewObserver {
+    private Label statusLabel;
 
     private Player player;
 
@@ -136,6 +137,9 @@ public class PlayerView extends Tab implements ViewObserver {
         if (player.board != null) {
             player.board.attach(this);
             update(player.board);
+
+            statusLabel = new Label("Checkpoints: 0");
+            top.getChildren().add(statusLabel);
         }
     }
 
@@ -144,6 +148,8 @@ public class PlayerView extends Tab implements ViewObserver {
         if (subject == player.board) {
             // TODO A6d: update the status label for this player (showing the number
             //     of achieved checkpoints)
+            statusLabel.setText("Checkpoints: " + player.getCheckpointsReached());
+
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
                 if (cardFieldView != null) {
