@@ -142,7 +142,7 @@ class GameControllerTest {
         current.setSpace(board.getSpace(0, 3));
         Heading originalHeading = current.getHeading(); // SOUTH
 
-        gameController.moveBack(current);
+        gameController.moveBack(current, current.getHeading());
 
         Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(),
                 "Player should be one step back (northward) at (0,2)!");

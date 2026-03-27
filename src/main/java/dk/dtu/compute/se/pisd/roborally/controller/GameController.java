@@ -144,7 +144,7 @@ public class GameController {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
-    
+
     // TODO A6e: implement the execution af an interactive card to
     //     this method (e.g. by switching to the PLAYER_INTERACTION phase
     //     at the right point)
@@ -221,7 +221,7 @@ public class GameController {
                     this.fastForward(player, player.getHeading());
                     break;
                 case BACK:
-                    this.moveBack(player);
+                    this.moveBack(player, player.getHeading());
                     break;
                 case UTURN:
                     this.uturn(player);
@@ -283,28 +283,19 @@ public class GameController {
         player.setHeading(player.getHeading().prev());
     }
 
-    public void moveBack(@NotNull Player player) {
-        player.setHeading(player.getHeading().next());
-        player.setHeading(player.getHeading().next());
-        Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
-        for(int p = 0; p < board.getPlayersNumber();p++){
-            Player currP = board.getPlayer(p);
-            if(currP.equals(player)) continue;
-            if(currP.getSpace().equals(nextspace)){
-                System.out.println("Space occupied by another player");
-                return;
+    public void moveBack(@NotNull Player player, Heading heading) {
+      uturn(player);
+        Space next = board.getNeighbour(player.getSpace(), player.getHeading());
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player other = board.getPlayer(i);
+            if (other == player) continue;
+
+            if (other.getSpace().equals(next)) {
+                moveForward(other, player.getHeading());
             }
         }
-        if(nextspace != null) {
-            player.setHeading(player.getHeading().next());
-            player.setHeading(player.getHeading().next());
-            player.setSpace(nextspace);
-        }
-        else{
-            player.setHeading(player.getHeading().next());
-            player.setHeading(player.getHeading().next());
-        }
-
+        player.setSpace(next);
+        uturn(player);
 
     }
 
