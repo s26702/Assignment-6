@@ -35,6 +35,11 @@ class GameControllerTest {
     }
 
 
+    /**
+     * Tests that moving forward moves the player one space in the current heading
+     *
+     * @author Mikkel Hjelm
+     */
     @Test
     void moveForward() {
         Board board = gameController.board;
@@ -42,9 +47,12 @@ class GameControllerTest {
 
         gameController.moveForward(current, current.getHeading());
 
-        Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
-        Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
-        Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
+        Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(),
+                "Player " + current.getName() + " should beSpace (0,1)!");
+        Assertions.assertEquals(Heading.SOUTH, current.getHeading(),
+                "Player 0 should be heading SOUTH!");
+        Assertions.assertNull(board.getSpace(0, 0).getPlayer(),
+                "Space (0,0) should be empty!");
     }
 
 
@@ -91,7 +99,6 @@ class GameControllerTest {
      * Test that turning left updates the heading correctly.
      * @author Christoffer Sørensen
      */
-
     @Test
     void testTurnLeft() {
         Board board = gameController.board;
@@ -105,8 +112,9 @@ class GameControllerTest {
         Assertions.assertEquals(current, board.getSpace(0, 0).getPlayer(),
                 "Player should not have moved after turning left!");
     }
+
     /**
-     * moveForward at the board boundary should keep the player in place (no wrap-around).
+     * Tests that the current player cannot move to an occupied space.
      * @author Lucas Spielberg-Winther
      */
     @Test
@@ -149,6 +157,82 @@ class GameControllerTest {
         Assertions.assertEquals(originalHeading, current.getHeading(),
                 "Heading should be restored to original after moveBack!");
     }
-    
+
+    /**
+     * Tests that fast forward pushes another player two steps when possible.
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testFastForwardPushesOtherPlayer() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Player other = board.getPlayer(1);
+
+        current.setSpace(board.getSpace(2, 2));
+        current.setHeading(Heading.EAST);
+
+        other.setSpace(board.getSpace(3, 2));
+
+        gameController.fastForward(current, current.getHeading());
+
+        Assertions.assertEquals(current, board.getSpace(4, 2).getPlayer(),
+                "Current player should end two spaces forward after fast forward.");
+        Assertions.assertEquals(other, board.getSpace(5, 2).getPlayer(),
+                "Other player should be pushed forward during fast forward.");
+    }
+
+    /**
+     * Tests that moving backwards pushes another player if the target
+     * space is occupied and the chain can move.
+     *
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testMoveBackPushesOtherPlayer() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Player other = board.getPlayer(1);
+
+        current.setSpace(board.getSpace(3, 3));
+        current.setHeading(Heading.NORTH);
+
+        other.setSpace(board.getSpace(3, 2));
+
+        gameController.moveBack(current, current.getHeading());
+
+        Assertions.assertEquals(current, board.getSpace(3, 2).getPlayer(),
+                "Current player should move backwards into the occupied space.");
+        Assertions.assertEquals(other, board.getSpace(3, 1).getPlayer(),
+                "Other player should be pushed one step backwards.");
+        Assertions.assertEquals(Heading.NORTH, current.getHeading(),
+                "Heading should remain unchanged after moveBack.");
+    }
+
+    /**
+     * Tests that moving backwards does not move any player when the push
+     * chain is blocked by the edge of the board.
+     *
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testMoveBackBlockedByPushChain() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Player other = board.getPlayer(1);
+
+        current.setSpace(board.getSpace(3, 1));
+        current.setHeading(Heading.NORTH);
+
+        other.setSpace(board.getSpace(3, 0));
+
+        gameController.moveBack(current, current.getHeading());
+
+        Assertions.assertEquals(current, board.getSpace(3, 1).getPlayer(),
+                "Current player should remain in place when backwards push is blocked.");
+        Assertions.assertEquals(other, board.getSpace(3, 0).getPlayer(),
+                "Other player should remain in place when the push chain is blocked.");
+        Assertions.assertEquals(Heading.NORTH, current.getHeading(),
+                "Heading should remain unchanged after failed moveBack.");
+    }
 
 }
