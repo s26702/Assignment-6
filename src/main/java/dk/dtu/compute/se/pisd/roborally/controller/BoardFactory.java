@@ -149,13 +149,6 @@ public class BoardFactory {
     }
 
 
-    // TODO A6b: add a method that returns a list (of type List<String>)
-    //     of all available board names. The corresponding method
-    //     createBoard(String name) must return a board for any of the
-    //     names in this list. Make sure that the new method that you create
-    //     here has a proper JavaDoc documentation.
-    //
-
     /**
      * Returns a list of all available board names that this factory can create.
      * This method is used by the AppController to populate the board selection
