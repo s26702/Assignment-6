@@ -184,7 +184,6 @@ class GameControllerTest {
     /**
      * Tests that moving backwards pushes another player if the target
      * space is occupied and the chain can move.
-     *
      * @author Mikkel Hjelm
      */
     @Test
