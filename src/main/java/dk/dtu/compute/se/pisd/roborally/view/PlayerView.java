@@ -136,10 +136,11 @@ public class PlayerView extends Tab implements ViewObserver {
 
         if (player.board != null) {
             player.board.attach(this);
-            update(player.board);
-
             statusLabel = new Label("Checkpoints: 0");
             top.getChildren().add(statusLabel);
+            update(player.board);
+
+
         }
     }
 
