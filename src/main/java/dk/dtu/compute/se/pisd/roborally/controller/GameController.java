@@ -209,7 +209,9 @@ public class GameController {
 
             switch (command) {
                 case FORWARD:
-                    this.moveForward(player, player.getHeading());
+                    if (canMove(player, player.getHeading())) {
+                        moveForward(player, player.getHeading());
+                    }
                     break;
                 case RIGHT:
                     this.turnRight(player);
@@ -218,7 +220,13 @@ public class GameController {
                     this.turnLeft(player);
                     break;
                 case FAST_FORWARD:
-                    this.fastForward(player, player.getHeading());
+                    for (int i = 0; i < 2; i++) {
+                        if (canMove(player, player.getHeading())) {
+                            moveForward(player, player.getHeading());
+                        } else {
+                            break;
+                        }
+                    }
                     break;
                 case BACK:
                     this.moveBack(player, player.getHeading());
@@ -261,6 +269,7 @@ public class GameController {
                 moveForward(other, heading);
             }
         }
+
         player.setSpace(next);
     }
 
@@ -284,19 +293,22 @@ public class GameController {
     }
 
     public void moveBack(@NotNull Player player, Heading heading) {
-      uturn(player);
-        Space next = board.getNeighbour(player.getSpace(), player.getHeading());
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player other = board.getPlayer(i);
-            if (other == player) continue;
-
-            if (other.getSpace().equals(next)) {
-                moveForward(other, player.getHeading());
-            }
-        }
-        player.setSpace(next);
         uturn(player);
+        Heading newHeading = player.getHeading();
+        if (canMove(player, newHeading)) {
+            Space next = board.getNeighbour(player.getSpace(), newHeading);
 
+            for (int i = 0; i < board.getPlayersNumber(); i++) {
+                Player other = board.getPlayer(i);
+                if (other == player) continue;
+
+                if (other.getSpace().equals(next)) {
+                    moveForward(other, newHeading);
+                }
+            }
+            player.setSpace(next);
+        }
+        uturn(player);
     }
 
     public void uturn(@NotNull Player player) {

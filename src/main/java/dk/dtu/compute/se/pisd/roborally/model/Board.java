@@ -206,22 +206,26 @@ public class Board extends Subject {
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
         int x = space.x;
         int y = space.y;
+
         switch (heading) {
-            case SOUTH:
-                if(y+1 >= height) return null;
-                else y = (y + 1);
-                break;
-            case WEST:
-                if(x+ width -1 < 0) return null;
-                else x = (x + width - 1) % width;
-                break;
             case NORTH:
-                if(y + height -1 < 0) return null;
-                else y = (y + height - 1) % height;
+                y--;
+                if (y < 0) return null;
                 break;
+
+            case SOUTH:
+                y++;
+                if (y >= height) return null;
+                break;
+
+            case WEST:
+                x--;
+                if (x < 0) return null;
+                break;
+
             case EAST:
-                if(x+1 >= width) return null;
-                else x = (x + 1) % width;
+                x++;
+                if (x >= width) return null;
                 break;
         }
 
