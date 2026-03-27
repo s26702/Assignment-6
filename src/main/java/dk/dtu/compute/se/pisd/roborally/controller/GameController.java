@@ -144,10 +144,7 @@ public class GameController {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
-
-    // XXX A6c
-    // xTODO A6d: add the execution of the field actions at the right
-    //      place in this method
+    
     // TODO A6e: implement the execution af an interactive card to
     //     this method (e.g. by switching to the PLAYER_INTERACTION phase
     //     at the right point)
