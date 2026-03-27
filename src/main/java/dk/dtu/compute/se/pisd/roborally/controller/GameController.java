@@ -146,7 +146,7 @@ public class GameController {
     }
 
     // XXX A6c
-    // TODO A6d: add the execution of the field actions at the right
+    // xTODO A6d: add the execution of the field actions at the right
     //      place in this method
     // TODO A6e: implement the execution af an interactive card to
     //     this method (e.g. by switching to the PLAYER_INTERACTION phase
@@ -212,7 +212,7 @@ public class GameController {
 
             switch (command) {
                 case FORWARD:
-                    this.moveForward(player);
+                    this.moveForward(player, player.getHeading());
                     break;
                 case RIGHT:
                     this.turnRight(player);
@@ -221,7 +221,7 @@ public class GameController {
                     this.turnLeft(player);
                     break;
                 case FAST_FORWARD:
-                    this.fastForward(player);
+                    this.fastForward(player, player.getHeading());
                     break;
                 case BACK:
                     this.moveBack(player);
@@ -236,34 +236,46 @@ public class GameController {
         }
     }
 
-    public void moveForward(@NotNull Player player) {
-        Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
-        for(int i = 0; i < board.getPlayersNumber();i++){
-            Player currP = board.getPlayer(i);
-            if(currP.equals(player)) continue;
-            if(currP.getSpace().equals(nextspace)){
-                System.out.println("Space occupied by another player");
-                return;
+    private boolean canMove(@NotNull Player player, Heading heading) {
+        Space next = board.getNeighbour(player.getSpace(), heading);
+
+        if (next == null) return false;
+
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player other = board.getPlayer(i);
+            if (other.equals(player)) continue;
+
+            if (other.getSpace().equals(next)) {
+                return canMove(other, heading);
             }
         }
-        if(nextspace!= null) player.setSpace(nextspace);
 
+        return true;
     }
 
-    public void fastForward(@NotNull Player player) {
-        for(int i = 0; i < 2; i++){
-            Space nextspace = board.getNeighbour(player.getSpace(),player.getHeading());
-            for(int p = 0; p < board.getPlayersNumber();p++){
-                Player currP = board.getPlayer(p);
-                if(currP.equals(player)) continue;
-                if(currP.getSpace().equals(nextspace)){
-                    System.out.println("Space occupied by another player");
-                    return;
-                }
-            }
-            if(nextspace != null) player.setSpace(nextspace);
-        }
+    public void moveForward(Player player, Heading heading) {
+        Space next = board.getNeighbour(player.getSpace(), heading);
 
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player other = board.getPlayer(i);
+            if (other == player) continue;
+
+            if (other.getSpace().equals(next)) {
+                moveForward(other, heading);
+            }
+        }
+        player.setSpace(next);
+    }
+
+
+    public void fastForward(@NotNull Player player, Heading heading) {
+        for (int i = 0; i < 2; i++) {
+            if (canMove(player, heading)) {
+                moveForward(player, heading);
+            } else {
+                break;
+            }
+        }
     }
 
     public void turnRight(@NotNull Player player) {

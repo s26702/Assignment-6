@@ -48,9 +48,6 @@ public enum Command {
     UTURN("U-turn");
 
 
-    // TODO A6c: add new literals to this enumeration for the two commands
-    //     BACK and UTURN, and implement the corresponding command in the
-    //     vlass GameController)
 
     // TODO A6e: add two new commands  here, which are interactive,
     //     which means that the player can chose between two options when

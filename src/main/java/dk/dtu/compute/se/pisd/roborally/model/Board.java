@@ -204,14 +204,11 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-        // TODO A6c: This implementation needs to be adjusted so that walls on
-        //          spaces (and maybe other obstacles) are taken into account
-        //          (see above JavaDoc comment for this method).
         int x = space.x;
         int y = space.y;
         switch (heading) {
             case SOUTH:
-                if(y+1 > height) return null;
+                if(y+1 >= height) return null;
                 else y = (y + 1);
                 break;
             case WEST:
@@ -223,7 +220,7 @@ public class Board extends Subject {
                 else y = (y + height - 1) % height;
                 break;
             case EAST:
-                if(x+1 > width) return null;
+                if(x+1 >= width) return null;
                 else x = (x + 1) % width;
                 break;
         }
