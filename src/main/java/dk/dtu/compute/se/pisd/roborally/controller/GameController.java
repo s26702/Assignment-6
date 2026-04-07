@@ -197,7 +197,6 @@ public class GameController {
      *
      * @param option the {@link Command} option chosen by the current player
      */
-
     public void executeCommandOptionAndContinue(@NotNull Command option) {
         Player currentPlayer = board.getCurrentPlayer();
         board.setPhase(Phase.ACTIVATION); // resume normal flow
