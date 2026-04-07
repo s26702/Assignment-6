@@ -149,11 +149,10 @@ public class GameController {
     //     this method (e.g. by switching to the PLAYER_INTERACTION phase
     //     at the right point)
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.FINISHED) {
             return;
         }
-        currentPlayer = board.getCurrentPlayer();
+       Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {

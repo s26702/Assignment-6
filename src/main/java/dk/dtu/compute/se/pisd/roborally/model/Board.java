@@ -235,8 +235,9 @@ public class Board extends Subject {
 
     /** Returns a status message describing the current state of the game */
     public String getStatusMessage() {
-        if(getPhase()== Phase.FINISHED) {
-            return "Player " + getCurrentPlayer().getName() + " has won the game!";
+        if(getPhase() == Phase.FINISHED) {
+            return "Player " + getCurrentPlayer().getName() + " has won the game!" +
+                    " Number of moves: " +  getMoveCounter();
         }
 
         // this is actually a view aspect, but for making assignment V1 easy for
