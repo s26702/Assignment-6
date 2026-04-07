@@ -156,6 +156,10 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
+                    if (command.isInteractive()) {
+                        board.setPhase(Phase.PLAYER_INTERACTION);
+                        return; // pause — wait for player to choose
+                    }
                     executeCommand(currentPlayer, command);
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
@@ -179,6 +183,44 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+    }
+
+    /**
+     * Executes the chosen option of an interactive command card and resumes
+     * the normal execution flow. This method is called when a player selects
+     * their desired action during the {@link Phase#PLAYER_INTERACTION} phase.
+     * After executing the chosen command, the game advances to the next player
+     * or executes field actions if all players have completed the current
+     * register. If the game is not in step mode, the execution loop resumes
+     * automatically.
+     *
+     * @param option the {@link Command} option chosen by the current player
+     */
+
+    public void executeCommandOptionAndContinue(@NotNull Command option) {
+        Player currentPlayer = board.getCurrentPlayer();
+        board.setPhase(Phase.ACTIVATION); // resume normal flow
+        executeCommand(currentPlayer, option);
+
+        // Now advance to next player (same logic as in executeNextStep)
+        int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
+        if (nextPlayerNumber < board.getPlayersNumber()) {
+            board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
+        } else {
+            executeFieldActions();
+            int step = board.getStep() + 1;
+            if (step < Player.NO_REGISTERS) {
+                makeProgramFieldsVisible(step);
+                board.setStep(step);
+                board.setCurrentPlayer(board.getPlayer(0));
+            } else {
+                startProgrammingPhase();
+            }
+        }
+
+        if (!board.isStepMode()) {
+            continuePrograms();
         }
     }
 
