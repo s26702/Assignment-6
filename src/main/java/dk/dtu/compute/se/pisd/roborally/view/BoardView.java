@@ -32,6 +32,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import javafx.scene.control.Alert;
 
 /**
  * ...
@@ -86,6 +88,15 @@ public class BoardView extends VBox implements ViewObserver {
         if (subject == board) {
             Phase phase = board.getPhase();
             statusLabel.setText(board.getStatusMessage());
+
+            if (phase == Phase.FINISHED) {
+                Player winner = board.getCurrentPlayer();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Game Over");
+                alert.setHeaderText("We have a winner!");
+                alert.setContentText(winner.getName() + " has won the game!");
+                alert.showAndWait();
+            }
         }
     }
 
