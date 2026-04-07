@@ -8,6 +8,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 
 class GameControllerTest {
 
@@ -232,6 +235,137 @@ class GameControllerTest {
                 "Other player should remain in place when the push chain is blocked.");
         Assertions.assertEquals(Heading.NORTH, current.getHeading(),
                 "Heading should remain unchanged after failed moveBack.");
+    }
+
+    /**
+     * Tests that a player collecting checkpoints in order increments their checkpoint count.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void testCheckpointInOrder() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        Checkpoint checkpoint1 = new Checkpoint(1);
+        board.getSpace(2, 2).getActions().add(checkpoint1);
+
+        current.setSpace(board.getSpace(2, 2));
+        checkpoint1.doAction(gameController, board.getSpace(2, 2));
+
+        Assertions.assertEquals(1, current.getCheckpointsReached(),
+                "Player should have 1 checkpoint after reaching checkpoint 1!");
+    }
+
+    /**
+     * Tests that a player cannot skip checkpoints — collecting checkpoint 2
+     * before checkpoint 1 should not increment the count.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void testCheckpointOutOfOrder() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        Checkpoint checkpoint2 = new Checkpoint(2);
+        board.getSpace(2, 2).getActions().add(checkpoint2);
+
+        current.setSpace(board.getSpace(2, 2));
+        checkpoint2.doAction(gameController, board.getSpace(2, 2));
+
+        Assertions.assertEquals(0, current.getCheckpointsReached(),
+                "Player should not collect checkpoint 2 before checkpoint 1!");
+    }
+
+    /**
+     * Tests that reaching the last checkpoint triggers the FINISHED phase.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void testLastCheckpointWinsGame() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        Checkpoint checkpoint1 = new Checkpoint(1);
+        board.getSpace(2, 2).getActions().add(checkpoint1);
+
+        Checkpoint checkpoint2 = new Checkpoint(2);
+        checkpoint2.setLastCheckPoint(true);
+        board.getSpace(3, 3).getActions().add(checkpoint2);
+
+        current.setSpace(board.getSpace(2, 2));
+        checkpoint1.doAction(gameController, board.getSpace(2, 2));
+
+        current.setSpace(board.getSpace(3, 3));
+        checkpoint2.doAction(gameController, board.getSpace(3, 3));
+
+        Assertions.assertEquals(Phase.FINISHED, board.getPhase(),
+                "Game should be in FINISHED phase after collecting all checkpoints!");
+        Assertions.assertEquals(current, board.getCurrentPlayer(),
+                "Winner should be the current player!");
+    }
+
+    /**
+     * Tests that the conveyor belt moves a player one space in the belt's direction.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void testConveyorBeltMovesPlayer() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        ConveyorBelt belt = new ConveyorBelt();
+        belt.setHeading(Heading.EAST);
+        board.getSpace(2, 2).getActions().add(belt);
+
+        current.setSpace(board.getSpace(2, 2));
+        belt.doAction(gameController, board.getSpace(2, 2));
+
+        Assertions.assertEquals(current, board.getSpace(3, 2).getPlayer(),
+                "Player should be moved one space east by the conveyor belt!");
+    }
+
+    /**
+     * Tests that a robot pushing another robot moves both correctly.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void testPushChain() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Player other = board.getPlayer(1);
+
+        current.setSpace(board.getSpace(0, 2));
+        current.setHeading(Heading.SOUTH);
+        other.setSpace(board.getSpace(0, 3));
+
+        gameController.moveForward(current, current.getHeading());
+
+        Assertions.assertEquals(current, board.getSpace(0, 3).getPlayer(),
+                "Current player should have moved to (0,3)!");
+        Assertions.assertEquals(other, board.getSpace(0, 4).getPlayer(),
+                "Other player should have been pushed to (0,4)!");
+    }
+
+    /**
+     * Tests that a robot cannot push another robot off the board edge.
+     * @author Lucas Spielberg-Winther
+     */
+    @Test
+    void testPushChainBlockedByEdge() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Player other = board.getPlayer(1);
+
+        current.setSpace(board.getSpace(0, 6));
+        current.setHeading(Heading.SOUTH);
+        other.setSpace(board.getSpace(0, 7));
+
+        gameController.moveForward(current, current.getHeading());
+
+        Assertions.assertEquals(current, board.getSpace(0, 6).getPlayer(),
+                "Current player should not move when push chain is blocked by edge!");
+        Assertions.assertEquals(other, board.getSpace(0, 7).getPlayer(),
+                "Other player should not be pushed off the board!");
     }
 
 }
