@@ -143,6 +143,7 @@ public class BoardFactory {
         board.getSpace(6, 6).getActions().add(checkpoint2);
 
         Checkpoint checkpoint3 = new Checkpoint(3);
+        checkpoint3.setLastCheckPoint(true);
         board.getSpace(9, 9).getActions().add(checkpoint3);
 
         return board;
