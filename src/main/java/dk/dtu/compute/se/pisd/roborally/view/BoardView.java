@@ -95,8 +95,8 @@ public class BoardView extends VBox implements ViewObserver {
                 alert.setTitle("Game Over");
                 alert.setHeaderText("We have a winner!");
                 alert.setContentText(winner.getName() + " has won the game!"
-                        + " Number of checkpoints: " + winner.getCheckpointsReached()
-                        + " Number of moves: " + board.getMoveCounter());
+                        + "\nNumber of checkpoints: " + winner.getCheckpointsReached()
+                        + "\nNumber of moves: " + board.getMoveCounter());
                 alert.showAndWait();
             }
         }
