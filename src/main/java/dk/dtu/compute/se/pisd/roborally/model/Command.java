@@ -45,7 +45,9 @@ public enum Command {
     LEFT("Turn Left"),
     FAST_FORWARD("Fast Fwd"),
     BACK("Back"),
-    UTURN("U-turn");
+    UTURN("U-turn"),
+    LEFT_OR_RIGHT("Left or Right", LEFT, RIGHT),
+    FAST_OR_FORWARD("Fast or Forward", FAST_FORWARD, FORWARD);
 
 
 
