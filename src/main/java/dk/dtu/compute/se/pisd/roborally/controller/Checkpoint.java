@@ -17,6 +17,8 @@ public class Checkpoint extends FieldAction {
 
     private int number;
 
+    private boolean lastCheckPoint;
+
     public Checkpoint(int number) {
         if(number <= 0 ) {
             throw new IllegalArgumentException("Checkpoint number must be positive");
@@ -32,6 +34,13 @@ public class Checkpoint extends FieldAction {
         return number;
     }
 
+    public boolean isLastCheckPoint() {
+        return lastCheckPoint;
+    }
+    public void setLastCheckPoint(boolean lastCheckPoint) {
+        this.lastCheckPoint = lastCheckPoint;
+    }
+
     @Override
     public boolean doAction(GameController gameController, Space space) {
         if (space == null) return false;
@@ -40,8 +49,12 @@ public class Checkpoint extends FieldAction {
         if (player == null) return false;
 
         int reached = player.getCheckpointsReached();
+
         if (reached == number - 1) {
             player.setCheckpointsReached(number);
+            if(lastCheckPoint) {
+                 gameController.finishGame(player);
+            }
             return true;
         }
         return false;

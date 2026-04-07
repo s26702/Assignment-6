@@ -150,6 +150,10 @@ public class GameController {
     //     at the right point)
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
+        if (board.getPhase() == Phase.FINISHED) {
+            return;
+        }
+        currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
@@ -358,6 +362,10 @@ public class GameController {
 
     }
 
+    public void finishGame(@NotNull Player player) {
+        board.setCurrentPlayer(player);
+        board.setPhase(Phase.FINISHED);
+    }
 
     /**
      * A method called when no corresponding controller operation is implemented yet.
