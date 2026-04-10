@@ -79,31 +79,36 @@ public class BoardFactory {
         Board board = new Board(8, 8, "Simple");
 
         // add some walls, actions and checkpoints to some spaces
-        Space space = board.getSpace(0,0);
+        Space space = board.getSpace(1,1);
         space.getWalls().add(Heading.SOUTH);
+
         ConveyorBelt action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
 
         space = board.getSpace(1,0);
         space.getWalls().add(Heading.NORTH);
+
         action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
 
         space = board.getSpace(1,1);
         space.getWalls().add(Heading.WEST);
+
         action  = new ConveyorBelt();
         action.setHeading(Heading.NORTH);
         space.getActions().add(action);
 
         space = board.getSpace(5,5);
         space.getWalls().add(Heading.SOUTH);
+
         action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
 
         space = board.getSpace(6,5);
+
         action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
@@ -114,12 +119,12 @@ public class BoardFactory {
 
     /**
      * Creates a more complex 10x10 board named "Advanced".
-     *
      * This board contains more advanced features such as additional walls
      * conveyor belts facing different directions to increase difficulty.
      * and three different checkpoints for the players
      *
      * @return an advanced Board configuration
+     * @author Mikkel Hjelm
      */
     private Board createAdvancedBoard() {
         Board board = new Board(10, 10, "Advanced");
@@ -127,6 +132,22 @@ public class BoardFactory {
         Space s1 = board.getSpace(2, 2);
         s1.getWalls().add(Heading.NORTH);
         s1.getWalls().add(Heading.WEST);
+
+        Space s2 = board.getSpace(5, 3);
+        s2.getWalls().add(Heading.NORTH);
+        s2.getWalls().add(Heading.WEST);
+
+        Space s3 = board.getSpace(8,6);
+        s3.getWalls().add(Heading.NORTH);
+        s3.getWalls().add(Heading.SOUTH);
+
+        Space s4 = board.getSpace(3,9);
+        s4.getWalls().add(Heading.EAST);
+        s4.getWalls().add(Heading.WEST);
+
+        Space s5 = board.getSpace(3,9);
+        s5.getWalls().add(Heading.EAST);
+        s5.getWalls().add(Heading.SOUTH);
 
         ConveyorBelt belt1 = new ConveyorBelt();
         belt1.setHeading(Heading.EAST);
@@ -136,6 +157,18 @@ public class BoardFactory {
         belt2.setHeading(Heading.SOUTH);
         board.getSpace(4, 1).getActions().add(belt2);
 
+        ConveyorBelt belt3 = new ConveyorBelt();
+        belt3.setHeading(Heading.WEST);
+        board.getSpace(7, 4).getActions().add(belt3);
+
+        ConveyorBelt belt4 = new ConveyorBelt();
+        belt4.setHeading(Heading.SOUTH);
+        board.getSpace(8, 8).getActions().add(belt4);
+
+        ConveyorBelt belt5 = new ConveyorBelt();
+        belt5.setHeading(Heading.EAST);
+        board.getSpace(3, 6).getActions().add(belt5);
+
         Checkpoint checkpoint1 = new Checkpoint(1);
         board.getSpace(4, 4).getActions().add(checkpoint1);
 
@@ -144,7 +177,11 @@ public class BoardFactory {
 
         Checkpoint checkpoint3 = new Checkpoint(3);
         checkpoint3.setLastCheckPoint(true);
-        board.getSpace(9, 9).getActions().add(checkpoint3);
+        board.getSpace(5, 9).getActions().add(checkpoint3);
+
+        Checkpoint checkpoint4 = new Checkpoint(4);
+        checkpoint4.setLastCheckPoint(true);
+        board.getSpace(8, 7).getActions().add(checkpoint4);
 
         return board;
     }
@@ -164,7 +201,4 @@ public class BoardFactory {
         underlyingList.add(ADVANCED_BOARD_NAME);
         return Collections.unmodifiableList(underlyingList);
     }
-
-
-
 }
