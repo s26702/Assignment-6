@@ -303,7 +303,9 @@ public class GameController {
     }
 
     public void moveForward(Player player, Heading heading) {
+
         Space next = board.getNeighbour(player.getSpace(), heading);
+        if (next == null || )
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player other = board.getPlayer(i);
