@@ -233,6 +233,43 @@ public class Board extends Subject {
         return getSpace(x, y);
     }
 
+    public boolean getNieghborwall(@NotNull Space space, @NotNull Heading heading) {
+        int x = space.x;
+        int y = space.y;
+
+        switch (heading) {
+            case NORTH:
+                Space neighbourN = getSpace(x, y - 1);
+                if (neighbourN != null && neighbourN.getWalls().contains(Heading.SOUTH)) {
+                    return true;
+                }
+                break;
+
+            case SOUTH:
+                Space neighbourS = getSpace(x, y + 1);
+                if (neighbourS != null && neighbourS.getWalls().contains(Heading.NORTH)) {
+                    return true;
+                }
+                break;
+
+            case WEST:
+                Space neighbourW = getSpace(x - 1, y);
+                if (neighbourW != null && neighbourW.getWalls().contains(Heading.EAST)) {
+                    return true;
+                }
+                break;
+
+            case EAST:
+                Space neighbourE = getSpace(x + 1, y);
+                if (neighbourE != null && neighbourE.getWalls().contains(Heading.WEST)) {
+                    return true;
+                }
+                break;
+        }
+
+        return false;
+    }
+
     /** Returns a status message describing the current state of the game */
     public String getStatusMessage() {
         if(getPhase() == Phase.FINISHED) {
