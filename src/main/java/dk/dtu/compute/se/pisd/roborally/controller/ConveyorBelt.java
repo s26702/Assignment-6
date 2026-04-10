@@ -54,8 +54,6 @@ public class ConveyorBelt extends FieldAction {
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO A6d: needs to be implemented
-        // ...
         Player player = space.getPlayer();
         if(player != null) {
             gameController.moveForward(player, heading);

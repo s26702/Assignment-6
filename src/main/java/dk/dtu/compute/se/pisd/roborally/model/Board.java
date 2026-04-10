@@ -244,7 +244,6 @@ public class Board extends Subject {
         // the students, this method gives a string representation of the current
         // status of the game
 
-        // TODO A6a: add the move count to the status message of the board
         return "Player = " + getCurrentPlayer().getName() + ". " + "Number of moves = " + getMoveCounter();
 
 
