@@ -292,7 +292,7 @@ public class GameController {
      * @param player the player that attempts to move
      * @param heading the direction of the movement
      * @return true if the player can move.
-     * @auther Mikkel Hjelm
+     * @author Mikkel Hjelm
      */
     private boolean canMove(@NotNull Player player, Heading heading) {
         if(player.getSpace() == null || heading == null) {
@@ -334,7 +334,7 @@ public class GameController {
         if(next == null) {
             return;
         }
-        
+
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player other = board.getPlayer(i);
             if (other == null ||other == player) {
