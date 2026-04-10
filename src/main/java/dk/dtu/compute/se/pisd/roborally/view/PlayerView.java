@@ -95,8 +95,6 @@ public class PlayerView extends Tab implements ViewObserver {
         //       players, but on the PlayersView (view for all players). This should be
         //       refactored.
 
-        // TODO A6c: the following buttons should be associated with the proper methods
-        //          in the game controller
 
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
@@ -133,8 +131,6 @@ public class PlayerView extends Tab implements ViewObserver {
         top.getChildren().add(cardsLabel);
         top.getChildren().add(cardsPane);
 
-        // TODO A6d: a label for the status of this player could be added here
-        //     for showing the number of achieved checkpoints (etc).
 
         if (player.board != null) {
             player.board.attach(this);
@@ -152,8 +148,7 @@ public class PlayerView extends Tab implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
-            // TODO A6d: update the status label for this player (showing the number
-            //     of achieved checkpoints)
+
             statusLabel.setText("Checkpoints: " + player.getCheckpointsReached());
 
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
@@ -218,10 +213,6 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    // TODO A6e: these buttons should be shown only when there is
-                    //      an interactive command card, and the buttons should represent
-                    //      the player's choices of the interactive command card. The
-                    //      following is just a mockup showing two options
                     if (player.board.getCurrentPlayer() == player) {
                         CommandCard card = player.getProgramField(player.board.getStep()).getCard();
                         if (card != null) {
