@@ -351,7 +351,7 @@ class GameControllerTest {
     void testPushChainBlockedByEdge() {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
-        Player other = board.getPlayer(1);
+        Player other = board.getPlayer(2);
 
         current.setSpace(board.getSpace(0, 6));
         current.setHeading(Heading.SOUTH);
