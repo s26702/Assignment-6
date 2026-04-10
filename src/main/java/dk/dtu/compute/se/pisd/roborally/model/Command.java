@@ -50,11 +50,6 @@ public enum Command {
     FAST_OR_FORWARD("Fast or Forward", FAST_FORWARD, FORWARD);
 
 
-
-    // TODO A6e: add two new commands  here, which are interactive,
-    //     which means that the player can chose between two options when
-    //     the command is executed.
-
     /**
      * The name shown for this command on the GUI.
      */
