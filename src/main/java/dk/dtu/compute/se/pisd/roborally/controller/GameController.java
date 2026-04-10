@@ -285,35 +285,65 @@ public class GameController {
         }
     }
 
+    /**
+     * Checks whether the given player can move one step in the specified heading.
+     * If the target space is occupied by another player, the method recursively
+     * checks wheter that player can also be moved in the same direction.
+     * @param player the player that attempts to move
+     * @param heading the direction of the movement
+     * @return true if the player can move.
+     * @auther Mikkel Hjelm
+     */
     private boolean canMove(@NotNull Player player, Heading heading) {
+        if(player.getSpace() == null || heading == null) {
+            return false;
+        }
+
         Space next = board.getNeighbour(player.getSpace(), heading);
 
-        if (next == null) return false;
+        if (next == null) {
+            return false;
+        }
 
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player other = board.getPlayer(i);
-            if (other.equals(player)) continue;
-
-            if (other.getSpace().equals(next)) {
+            if (other.equals(player)) {
+                continue;
+            }
+            if (next.equals(other.getSpace())) {
                 return canMove(other, heading);
             }
         }
-
         return true;
     }
 
+    /**
+     * Moves a player one space forward in the given heading.
+     * If another player occupies the target space, that player is moved first
+     * in the same direction, creating a push chain.
+     * @param player the player to move
+     * @param heading the direction of movement
+     * @author Mikkel Hjelm
+     */
     public void moveForward(Player player, Heading heading) {
+        if(player == null || player.getSpace() == null || heading == null) {
+            return;
+        }
         Space next = board.getNeighbour(player.getSpace(), heading);
 
+        if(next == null) {
+            return;
+        }
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player other = board.getPlayer(i);
-            if (other == player) continue;
+            if (other == null ||other == player) {
+                continue;
+            }
 
-            if (other.getSpace().equals(next)) {
+            if (next.equals(other.getSpace())) {
                 moveForward(other, heading);
             }
         }
-
         player.setSpace(next);
     }
 

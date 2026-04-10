@@ -6,7 +6,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
  * This class represents a checkpoint on the RoboRally board
- *
  * A checkpoint is a field action that can be placed on a {@link Space}.
  * Each checkpoint has a unique number that indicates the order in which players must reach them
  *
@@ -19,6 +18,12 @@ public class Checkpoint extends FieldAction {
 
     private boolean lastCheckPoint;
 
+    /**
+     * The constructor for the checkpoint class
+     * If the number instantiated is negative we throw an exception
+     * @param number
+     * @author Mikkel Hjelm
+     */
     public Checkpoint(int number) {
         if(number <= 0 ) {
             throw new IllegalArgumentException("Checkpoint number must be positive");
