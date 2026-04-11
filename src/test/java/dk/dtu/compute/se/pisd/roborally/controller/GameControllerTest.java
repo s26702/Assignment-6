@@ -353,15 +353,15 @@ class GameControllerTest {
         Player current = board.getCurrentPlayer();
         Player other = board.getPlayer(2);
 
-        current.setSpace(board.getSpace(0, 6));
+        current.setSpace(board.getSpace(0, board.height-2));
         current.setHeading(Heading.SOUTH);
-        other.setSpace(board.getSpace(0, 7));
+        other.setSpace(board.getSpace(0, board.height-1));
 
-        gameController.moveForward(current, current.getHeading());
+        gameController.moveForward(current, Heading.SOUTH);
 
-        Assertions.assertEquals(current, board.getSpace(0, 6).getPlayer(),
+        Assertions.assertEquals(current, board.getSpace(0, board.height-2).getPlayer(),
                 "Current player should not move when push chain is blocked by edge!");
-        Assertions.assertEquals(other, board.getSpace(0, 7).getPlayer(),
+        Assertions.assertEquals(other, board.getSpace(0, board.height-1).getPlayer(),
                 "Other player should not be pushed off the board!");
     }
 
