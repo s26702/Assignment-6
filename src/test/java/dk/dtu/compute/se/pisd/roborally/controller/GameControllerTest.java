@@ -8,6 +8,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 
+/**
+ * This controller contains the core game logic of RoboRally.
+ *
+ * The GameController is responsible for managing the progression of the game,
+ * including player movement, card execution, phase changes, field actions,
+ * and turn handling. It coordinates interactions between the players and the
+ * board and ensures that the game rules are applied correctly.
+ *
+ * The controller is used as the main entry point for executing actions during
+ * the game and updating the game state accordingly.
+ *
+ * @author Lucas Winther, Mikkel Hjelm, Niklas Hansen
+ */
 
 class GameControllerTest {
 

@@ -25,7 +25,16 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ *
+ * This controller contains the core game logic of RoboRally.
+ *
+ * The GameController is responsible for managing the progression of the game,
+ * including player movement, card execution, phase changes, field actions,
+ * and turn handling. It coordinates interactions between the players and the
+ * board and ensures that the game rules are applied correctly.
+ *
+ * The controller is used as the main entry point for executing actions during
+ * the game and updating the game state accordingly.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -376,7 +385,8 @@ public class GameController {
                 Player other = board.getPlayer(i);
                 if (other == player) continue;
 
-                if (other.getSpace().equals(next)) {
+                Space otherSpace = other.getSpace();
+                if (otherSpace != null && otherSpace.equals(next)) {
                     moveForward(other, newHeading);
                 }
             }
@@ -395,5 +405,5 @@ public class GameController {
         board.setCurrentPlayer(player);
         board.setPhase(Phase.FINISHED);
     }
-    
+
 }

@@ -51,7 +51,7 @@ class ControllerAdditionalTest {
      */
     @Test
     void testCreateBoardUnknownReturnsSimpleBoard() {
-        Board board = BoardFactory.getInstance().createBoard("SomethingElse");
+        Board board = BoardFactory.getInstance().createBoard("Blah Blah");
 
         Assertions.assertNotNull(board);
         Assertions.assertEquals("Simple", board.boardName);
