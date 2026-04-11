@@ -373,20 +373,5 @@ class GameControllerTest {
                 "Other player should not be pushed off the board!");
     }
 
-    /**
-     *  Tests that a checkpoint does not increment progress when no player is standing on the space.
-     *  Ensures that checkpoint actions only affects players
-     *  currently occupying the checkpoint space.
-     * @author Mikkel Hjelm
-     */
-    @Test
-    void testCheckpointWithoutPlayerDoesNothing() {
-        Board board = gameController.board;
-        Checkpoint checkpoint1 = new Checkpoint(1);
 
-        board.getSpace(2, 2).getActions().add(checkpoint1);
-        checkpoint1.doAction(gameController, board.getSpace(2, 2));
-
-        Assertions.assertEquals(0, board.getPlayer(0).getCheckpointsReached());
-    }
 }

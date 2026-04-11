@@ -1,7 +1,12 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 
@@ -17,6 +22,30 @@ import java.util.List;
  * @author Mikkel Hjelm
  */
 class ControllerAdditionalTest {
+
+    private final int TEST_WIDTH = 8;
+    private final int TEST_HEIGHT = 8;
+
+    private GameController gameController;
+
+
+    @BeforeEach
+    void setUp() {
+        Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
+        gameController = new GameController(board);
+        for (int i = 0; i < 6; i++) {
+            Player player = new Player(board, null,"Player " + i);
+            board.addPlayer(player);
+            player.setSpace(board.getSpace(i, i));
+            player.setHeading(Heading.values()[i % Heading.values().length]);
+        }
+        board.setCurrentPlayer(board.getPlayer(0));
+    }
+
+    @AfterEach
+    void tearDown() {
+        gameController = null;
+    }
 
     /**
      * Verifies that BoardFactory follows the singleton pattern
@@ -194,5 +223,76 @@ class ControllerAdditionalTest {
         List<String> names = BoardFactory.getInstance().getBoardNames();
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> names.add("TestBoard"));
+    }
+    /**
+     * Ensures that checkpoint actions only affect players
+     * currently occupying the checkpoint space.
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testCheckpointWithoutPlayerDoesNothing() {
+        Checkpoint checkpoint1 = new Checkpoint(1);
+        Board  board = gameController.board;
+
+        board.getSpace(2, 2).getActions().add(checkpoint1);
+        checkpoint1.doAction(gameController, board.getSpace(2, 2));
+
+        Assertions.assertEquals(0, board.getPlayer(0).getCheckpointsReached());
+    }
+
+    /**
+     * Tests that the checkpoint action correctly updates the
+     * number of checkpoints reached for the player.
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testCheckpointIncrementsWhenPlayerIsOnSpace() {
+        Checkpoint checkpoint = new Checkpoint(1);
+        Board board = gameController.board;
+        Player player = board.getPlayer(0);
+
+        player.setSpace(board.getSpace(2, 2));
+        board.getSpace(2, 2).getActions().add(checkpoint);
+
+        checkpoint.doAction(gameController, board.getSpace(2, 2));
+
+        Assertions.assertEquals(1, player.getCheckpointsReached());
+    }
+
+
+    /**
+     * Tests that the checkpoint constructor throws an exception
+     * when the checkpoint number is 0 or less.
+     */
+    @Test
+    void testCheckpointConstructorThrowsExceptionForZero() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Checkpoint(0));
+    }
+
+
+    /**
+     * Tests that the checkpoint number can be updated
+     * and retrieved correctly using the setter and getter.
+     */
+    @Test
+    void testCheckpointNumberGetterAndSetter() {
+        Checkpoint checkpoint = new Checkpoint(1);
+
+        checkpoint.setNumber(3);
+
+        Assertions.assertEquals(3, checkpoint.getNumber());
+    }
+
+    /**
+     * Tests that the last checkpoint
+     * can be updated and retrieved correctly
+     */
+    @Test
+    void testLastCheckpointGetterAndSetter() {
+        Checkpoint checkpoint = new Checkpoint(1);
+
+        checkpoint.setLastCheckPoint(true);
+
+        Assertions.assertTrue(checkpoint.isLastCheckPoint());
     }
 }
