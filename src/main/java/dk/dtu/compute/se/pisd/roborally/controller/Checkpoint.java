@@ -1,6 +1,5 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
@@ -21,7 +20,7 @@ public class Checkpoint extends FieldAction {
     /**
      * The constructor for the checkpoint class
      * If the number instantiated is negative we throw an exception
-     * @param number
+     * @param number The number of the checkpoint
      * @author Mikkel Hjelm
      */
     public Checkpoint(int number) {
