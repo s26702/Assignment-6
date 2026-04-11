@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 
+
 class GameControllerTest {
 
     private final int TEST_WIDTH = 8;
@@ -353,15 +354,15 @@ class GameControllerTest {
         Player current = board.getCurrentPlayer();
         Player other = board.getPlayer(2);
 
-        current.setSpace(board.getSpace(0, board.height-2));
+        current.setSpace(board.getSpace(0, 2));
         current.setHeading(Heading.SOUTH);
-        other.setSpace(board.getSpace(0, board.height-1));
+        other.setSpace(board.getSpace(0, 2));
 
         gameController.moveForward(current, Heading.SOUTH);
 
-        Assertions.assertEquals(current, board.getSpace(0, board.height-2).getPlayer(),
+        Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(),
                 "Current player should not move when push chain is blocked by edge!");
-        Assertions.assertEquals(other, board.getSpace(0, board.height-1).getPlayer(),
+        Assertions.assertEquals(other, board.getSpace(0, 2).getPlayer(),
                 "Other player should not be pushed off the board!");
     }
 
