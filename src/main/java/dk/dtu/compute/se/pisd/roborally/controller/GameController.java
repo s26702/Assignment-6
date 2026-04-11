@@ -26,15 +26,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  *
- * This controller contains the core game logic of RoboRally.
+ * This controller represents the main game logic of RoboRally.
+ * It manages the current state of the game and executes the rules
+ * for player movement, command cards, phases, and board actions.
  *
- * The GameController is responsible for managing the progression of the game,
- * including player movement, card execution, phase changes, field actions,
- * and turn handling. It coordinates interactions between the players and the
- * board and ensures that the game rules are applied correctly.
- *
- * The controller is used as the main entry point for executing actions during
- * the game and updating the game state accordingly.
+ * The GameController coordinates the interaction between the board
+ * and the players during the execution of a game.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *

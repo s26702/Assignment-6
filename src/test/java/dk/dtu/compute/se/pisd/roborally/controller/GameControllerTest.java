@@ -9,17 +9,16 @@ import org.junit.jupiter.api.AfterEach;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 
 /**
- * This controller contains the core game logic of RoboRally.
+ * Unit tests for the {@link GameController} class.
  *
- * The GameController is responsible for managing the progression of the game,
- * including player movement, card execution, phase changes, field actions,
- * and turn handling. It coordinates interactions between the players and the
- * board and ensures that the game rules are applied correctly.
+ * This test class verifies the core game logic of RoboRally, including
+ * player movement, command execution, phase transitions, board interactions,
+ * and edge cases related to game progression.
  *
- * The controller is used as the main entry point for executing actions during
- * the game and updating the game state accordingly.
+ * The purpose of these tests is to ensure correct behavior of the main
+ * controller logic and achieve high line coverage of the GameController.
  *
- * @author Lucas Winther, Mikkel Hjelm, Niklas Hansen
+ * @author Lucas Spielberg-Winther, Mikkel Hjelm and Niklas Hansen
  */
 
 class GameControllerTest {
@@ -67,10 +66,6 @@ class GameControllerTest {
         Assertions.assertNull(board.getSpace(0, 0).getPlayer(),
                 "Space (0,0) should be empty!");
     }
-
-
-    // TODO and there should be more tests added for the different assignments eventually
-
 
     /**
      * uTurn should rotate the player 180 degrees without moving.
@@ -379,8 +374,7 @@ class GameControllerTest {
     }
 
     /**
-     *  Tests that a checkpoint does not increment progress
-     *  when no player is standing on the space.
+     *  Tests that a checkpoint does not increment progress when no player is standing on the space.
      *  Ensures that checkpoint actions only affects players
      *  currently occupying the checkpoint space.
      * @author Mikkel Hjelm
