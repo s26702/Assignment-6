@@ -329,7 +329,6 @@ public class GameController {
         if(player == null || player.getSpace() == null || heading == null) {
             return;
         }
-
         Space next = board.getNeighbour(player.getSpace(), heading);
         if(next == null || board.getNieghborwall(player.getSpace(), heading)) {
             return;
