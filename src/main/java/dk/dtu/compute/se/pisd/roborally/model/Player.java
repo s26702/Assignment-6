@@ -135,10 +135,17 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    /**
+     * Getter for Checkpoints reached
+     */
 
     public int getCheckpointsReached(){
         return checkpointsReached;
     }
+
+    /**
+     * Setter for Checkpoints reached
+     */
 
     public void setCheckpointsReached(int checkpointsReached){
         if(checkpointsReached != this.checkpointsReached) {
