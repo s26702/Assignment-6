@@ -32,11 +32,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * ...
+ * Main JavaFX application class for RoboRally.
+ * It is responsible for initializing the primary stage, creating the
+ * main window layout, and connecting the user interface to the
+ * application controller.
+ *
+ * The application starts with an empty board area and updates the
+ * center view whenever a new game is created or loaded.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
+
 public class RoboRally extends Application {
 
     private static final int MIN_APP_WIDTH = 600;
