@@ -39,7 +39,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- * ...
+ * A SpaceView is responsible for displaying the visual state of a board space,
+ * including players, walls, field actions such as conveyor belts and checkpoints,
+ * and any additional board elements placed on that space.
+ * The view observes the underlying {@link Space} model and updates its
+ * appearance whenever the model changes.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -98,9 +102,9 @@ public class SpaceView extends StackPane implements ViewObserver {
      * space model changes. Clears all existing children and redraws walls,
      * conveyor belts, checkpoints, and the player if present.
      *
-     * <p>Walls are drawn as red lines along the corresponding edge of the space.
+     * Walls are drawn as red lines along the corresponding edge of the space.
      * Conveyor belts are drawn as gray triangles pointing in their heading direction.
-     * Checkpoints are drawn as yellow circles with their number on top.</p>
+     * Checkpoints are drawn as yellow circles with their number on top.
      *
      * @param subject the subject that triggered the update, expected to be this space
      */

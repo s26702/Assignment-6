@@ -36,10 +36,14 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.scene.control.Alert;
 
 /**
- * ...
+ * Main graphical view of the RoboRally game board.
+ *
+ * The BoardView displays all spaces on the board, the player tabs,
+ * and a status label showing the current game state.
+ * It observes the {@link Board} and updates the interface whenever
+ * the game state changes.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class BoardView extends VBox implements ViewObserver {
 
@@ -83,6 +87,15 @@ public class BoardView extends VBox implements ViewObserver {
         update(board);
     }
 
+    /**
+     * Updates the board view when the observed board changes.
+     *
+     * The status label is refreshed to reflect the current board status.
+     * If the game has finished, a dialog is shown announcing the winner
+     * and displaying final statistics.
+     *
+     * @param subject the observed board subject
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == board) {
@@ -102,8 +115,7 @@ public class BoardView extends VBox implements ViewObserver {
         }
     }
 
-    // XXX this handler and its uses should eventually be deleted! This is just to help test the
-    //     behaviour of the game by being able to explicitly move the players on the board!
+
     private class SpaceEventHandler implements EventHandler<MouseEvent> {
 
         final public GameController gameController;

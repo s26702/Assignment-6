@@ -41,10 +41,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * ...
+ * Graphical view of a single command card field in RoboRally.
  *
+ * A CardFieldView displays the contents of a {@link CommandCardField}
+ * and updates its appearance depending on whether the card is visible,
+ * hidden, empty, or involved in drag-and-drop operations.
+ *
+ * The view observes the underlying card field, the player, and the board
+ * in order to stay synchronized with changes in the game state.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class CardFieldView extends GridPane implements ViewObserver {
 
@@ -129,6 +134,7 @@ public class CardFieldView extends GridPane implements ViewObserver {
         }
     }
 
+
     private class OnDragDetectedHandler implements EventHandler<MouseEvent> {
 
         @Override
@@ -157,8 +163,26 @@ public class CardFieldView extends GridPane implements ViewObserver {
     }
 
 
-    // TODO redundant with DragEnterHandler (but some functionality needs to be moved from
-    //      here to DragEnterHandler
+    /**
+     * Checks whether the given drag event represents a valid drop operation
+     * for the specified target card field view.
+     * A drop is considered valid if the target field exists, belongs to a player
+     * on a board, and the dragboard contains a RoboRally command card.
+     *
+     * @param target the potential drop target
+     * @param event the drag event to validate
+     * @return true if the drag event can be accepted as a valid drop, false otherwise
+     */
+    private boolean isValidDrop(CardFieldView target, DragEvent event) {
+        CommandCardField cardField = target.field;
+        return cardField != null &&
+                (cardField.getCard() == null || event.getGestureSource() == target) &&
+                cardField.player != null &&
+                cardField.player.board != null &&
+                event.getDragboard().hasContent(ROBO_RALLY_CARD);
+    }
+
+
     private class OnDragOverHandler implements EventHandler<DragEvent> {
 
         @Override
@@ -181,6 +205,7 @@ public class CardFieldView extends GridPane implements ViewObserver {
 
     }
 
+
     private class OnDragEnteredHandler implements EventHandler<DragEvent> {
 
         @Override
@@ -188,21 +213,14 @@ public class CardFieldView extends GridPane implements ViewObserver {
             Object t = event.getTarget();
             if (t instanceof CardFieldView) {
                 CardFieldView target = (CardFieldView) t;
-                CommandCardField cardField = target.field;
-                if (cardField != null &&
-                        cardField.getCard() == null &&
-                        cardField.player != null &&
-                        cardField.player.board != null) {
-                    if (event.getGestureSource() != target &&
-                            event.getDragboard().hasContent(ROBO_RALLY_CARD)) {
-                        target.setBackground(BG_DROP);
-                    }
+                if (isValidDrop(target, event)) {
+                    target.setBackground(BG_DROP);
                 }
             }
             event.consume();
         }
-
     }
+
 
     private class OnDragExitedHandler implements EventHandler<DragEvent> {
 
@@ -211,21 +229,14 @@ public class CardFieldView extends GridPane implements ViewObserver {
             Object t = event.getTarget();
             if (t instanceof CardFieldView) {
                 CardFieldView target = (CardFieldView) t;
-                CommandCardField cardField = target.field;
-                if (cardField != null &&
-                        cardField.getCard() == null &&
-                        cardField.player != null &&
-                        cardField.player.board != null) {
-                    if (event.getGestureSource() != target &&
-                            event.getDragboard().hasContent(ROBO_RALLY_CARD)) {
-                        target.setBackground(BG_NONE);
-                    }
+                if (isValidDrop(target, event)) {
+                    target.setBackground(BG_NONE);
                 }
             }
             event.consume();
         }
-
     }
+
 
     private class OnDragDroppedHandler implements EventHandler<DragEvent> {
 
@@ -237,22 +248,16 @@ public class CardFieldView extends GridPane implements ViewObserver {
                 CommandCardField cardField = target.field;
 
                 Dragboard db = event.getDragboard();
-                if (cardField != null &&
-                        cardField.getCard() == null &&
-                        cardField.player != null &&
-                        cardField.player.board != null) {
-                    if (event.getGestureSource() != target &&
-                            db.hasContent(ROBO_RALLY_CARD)) {
-                        Object object = db.getContent(ROBO_RALLY_CARD);
-                        if (object instanceof Integer) {
-                            int number = (Integer) object;
-                            if (number < Command.values().length) {
-                                Command command = Command.values()[number];
-                                cardField.setCard(new CommandCard(command));
-                                event.setDropCompleted(true);
-                                event.consume();
-                                return;
-                            }
+                if (isValidDrop(target, event)) {
+                    Object object = db.getContent(ROBO_RALLY_CARD);
+                    if (object instanceof Integer) {
+                        int number = (Integer) object;
+                        if (number < Command.values().length) {
+                            Command command = Command.values()[number];
+                            cardField.setCard(new CommandCard(command));
+                            event.setDropCompleted(true);
+                            event.consume();
+                            return;
                         }
                     }
                 }
@@ -261,8 +266,8 @@ public class CardFieldView extends GridPane implements ViewObserver {
             }
             event.consume();
         }
-
     }
+
 
     private class OnDragDoneHandler implements EventHandler<DragEvent> {
 

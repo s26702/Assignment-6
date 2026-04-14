@@ -28,10 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ...
+ * Represents a single space on the RoboRally board.
+ *
+ * A space belongs to exactly one {@link Board} and is identified by its
+ * coordinates on that board. A space may contain at most one {@link Player},
+ * and it can also contain walls and field actions that affect movement or
+ * gameplay.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class Space extends Subject {
 
@@ -43,10 +47,10 @@ public class Space extends Subject {
     private Player player;
 
 
-    // XXX A3
+
     private List<Heading> walls = new ArrayList<>();
 
-    // XXX A3
+
     private List<FieldAction> actions = new ArrayList<>();
 
     public Space(Board board, int x, int y) {
@@ -83,7 +87,6 @@ public class Space extends Subject {
      *
      * @return the list of walls on this space
      */
-    // XXX A3
     public List<Heading> getWalls() {
         return walls;
     }
@@ -96,7 +99,6 @@ public class Space extends Subject {
      *
      * @return the list of field actions on this space
      */
-    // XXX A3
     public List<FieldAction> getActions() {
         return actions;
     }
