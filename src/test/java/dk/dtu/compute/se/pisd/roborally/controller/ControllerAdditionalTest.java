@@ -223,7 +223,6 @@ class ControllerAdditionalTest {
     /**
      * Ensures that checkpoint actions only affect players
      * currently occupying the checkpoint space.
-     * @author Mikkel Hjelm
      */
     @Test
     void testCheckpointWithoutPlayerDoesNothing() {
@@ -239,7 +238,6 @@ class ControllerAdditionalTest {
     /**
      * Tests that the checkpoint action correctly updates the
      * number of checkpoints reached for the player.
-     * @author Mikkel Hjelm
      */
     @Test
     void testCheckpointIncrementsWhenPlayerIsOnSpace() {
@@ -259,7 +257,6 @@ class ControllerAdditionalTest {
     /**
      * Tests that the checkpoint constructor throws an exception
      * when the checkpoint number is 0 or less.
-     * @author Mikkel Hjelm
      */
     @Test
     void testCheckpointConstructorThrowsExceptionForZero() {
@@ -270,7 +267,6 @@ class ControllerAdditionalTest {
     /**
      * Tests that the checkpoint number can be updated
      * and retrieved correctly using the setter and getter.
-     * @author Mikkel Hjelm
      */
     @Test
     void testCheckpointNumberGetterAndSetter() {
@@ -284,7 +280,6 @@ class ControllerAdditionalTest {
     /**
      * Tests that the last checkpoint
      * can be updated and retrieved correctly
-     * @author Mikkel Hjelm
      */
     @Test
     void testLastCheckpointGetterAndSetter() {
@@ -297,7 +292,6 @@ class ControllerAdditionalTest {
 
     /**
      * Tests that AppController reports no running game initially.
-     * @author Mikkel Hjelm
      */
     @Test
     void testAppControllerIsGameRunningFalseInitially() {
@@ -309,7 +303,6 @@ class ControllerAdditionalTest {
 
     /**
      * Tests that stopGame returns false when no game is running.
-     * @author Mikkel Hjelm
      */
     @Test
     void testAppControllerStopGameFalseWhenNoGameRunning() {
@@ -322,7 +315,6 @@ class ControllerAdditionalTest {
 
     /**
      * Tests that update performs no action and throws no exception.
-     * @author Mikkel Hjelm
      */
     @Test
     void testAppControllerUpdateDoesNothing() {
@@ -338,7 +330,6 @@ class ControllerAdditionalTest {
      * @param controller the AppController
      * @param gameController the GameController to inject
      * @throws Exception if reflection fails
-     * @author Mikkel Hjelm
      */
     private void setGameController(AppController controller, GameController gameController) throws Exception {
         Field field = AppController.class.getDeclaredField("gameController");
