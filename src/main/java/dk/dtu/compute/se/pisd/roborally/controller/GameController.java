@@ -347,6 +347,7 @@ public class GameController {
             }
 
             if (next.equals(other.getSpace())) {
+                if (!canMove(other, heading)) return;
                 moveForward(other, heading);
             }
         }
@@ -373,22 +374,11 @@ public class GameController {
     }
 
     public void moveBack(@NotNull Player player, Heading heading) {
+        Heading NewHeading = heading.next().next();
+        if(!canMove(player, NewHeading)) return;
+
         uturn(player);
-        Heading newHeading = player.getHeading();
-        if (canMove(player, newHeading)) {
-            Space next = board.getNeighbour(player.getSpace(), newHeading);
-
-            for (int i = 0; i < board.getPlayersNumber(); i++) {
-                Player other = board.getPlayer(i);
-                if (other == player) continue;
-
-                Space otherSpace = other.getSpace();
-                if (otherSpace != null && otherSpace.equals(next)) {
-                    moveForward(other, newHeading);
-                }
-            }
-            player.setSpace(next);
-        }
+        moveForward(player, player.getHeading());
         uturn(player);
     }
 

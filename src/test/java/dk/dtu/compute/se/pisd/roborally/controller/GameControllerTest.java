@@ -201,7 +201,7 @@ class GameControllerTest {
         Player other = board.getPlayer(1);
 
         current.setSpace(board.getSpace(3, 3));
-        current.setHeading(Heading.NORTH);
+        current.setHeading(Heading.SOUTH);
 
         other.setSpace(board.getSpace(3, 2));
 
@@ -211,7 +211,7 @@ class GameControllerTest {
                 "Current player should move backwards into the occupied space.");
         Assertions.assertEquals(other, board.getSpace(3, 1).getPlayer(),
                 "Other player should be pushed one step backwards.");
-        Assertions.assertEquals(Heading.NORTH, current.getHeading(),
+        Assertions.assertEquals(Heading.SOUTH, current.getHeading(),
                 "Heading should remain unchanged after moveBack.");
     }
 
@@ -228,7 +228,7 @@ class GameControllerTest {
         Player other = board.getPlayer(1);
 
         current.setSpace(board.getSpace(3, 1));
-        current.setHeading(Heading.NORTH);
+        current.setHeading(Heading.SOUTH);
 
         other.setSpace(board.getSpace(3, 0));
 
@@ -238,7 +238,7 @@ class GameControllerTest {
                 "Current player should remain in place when backwards push is blocked.");
         Assertions.assertEquals(other, board.getSpace(3, 0).getPlayer(),
                 "Other player should remain in place when the push chain is blocked.");
-        Assertions.assertEquals(Heading.NORTH, current.getHeading(),
+        Assertions.assertEquals(Heading.SOUTH, current.getHeading(),
                 "Heading should remain unchanged after failed moveBack.");
     }
 
@@ -361,15 +361,15 @@ class GameControllerTest {
         Player current = board.getCurrentPlayer();
         Player other = board.getPlayer(2);
 
-        current.setSpace(board.getSpace(0, 2));
+        current.setSpace(board.getSpace(0, board.height-2));
         current.setHeading(Heading.SOUTH);
-        other.setSpace(board.getSpace(0, 2));
+        other.setSpace(board.getSpace(0, board.height-1));
 
         gameController.moveForward(current, Heading.SOUTH);
 
-        Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(),
+        Assertions.assertEquals(current, board.getSpace(0, board.height-2).getPlayer(),
                 "Current player should not move when push chain is blocked by edge!");
-        Assertions.assertEquals(other, board.getSpace(0, 2).getPlayer(),
+        Assertions.assertEquals(other, board.getSpace(0, board.height-1).getPlayer(),
                 "Other player should not be pushed off the board!");
     }
 
