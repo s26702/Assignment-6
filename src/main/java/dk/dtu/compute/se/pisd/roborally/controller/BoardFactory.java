@@ -76,42 +76,65 @@ public class BoardFactory {
      * @return a simple Board configuration
      */
     private Board createDefaultBoard() {
-        Board board = new Board(8, 8, "Simple");
+        Board board = new Board(8, 8, "Factory Floor");
 
-        // add some walls, actions and checkpoints to some spaces
-        Space space = board.getSpace(1,1);
-        space.getWalls().add(Heading.SOUTH);
+        // ── Conveyor corridor: row 2, cols 0–3 → EAST ──
+        for (int col = 0; col < 4; col++) {
+            ConveyorBelt belt = new ConveyorBelt();
+            belt.setHeading(Heading.EAST);
+            board.getSpace(col, 2).getActions().add(belt);
+        }
 
-        ConveyorBelt action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
+        // ── Conveyor corridor: row 5, cols 4–7 → WEST ──
+        for (int col = 4; col < 8; col++) {
+            ConveyorBelt belt = new ConveyorBelt();
+            belt.setHeading(Heading.WEST);
+            board.getSpace(col, 5).getActions().add(belt);
+        }
 
-        space = board.getSpace(1,0);
-        space.getWalls().add(Heading.NORTH);
+        // ── Conveyor corridor: col 2, rows 3–5 → NORTH ──
+        for (int row = 3; row <= 5; row++) {
+            ConveyorBelt belt = new ConveyorBelt();
+            belt.setHeading(Heading.NORTH);
+            board.getSpace(2, row).getActions().add(belt);
+        }
 
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
+        // ── Fast conveyor: col 5, rows 2–4 → SOUTH ──
+        for (int row = 2; row <= 4; row++) {
+            ConveyorBelt belt = new ConveyorBelt();
+            belt.setHeading(Heading.SOUTH);
+            board.getSpace(5, row).getActions().add(belt);
+        }
 
-        space = board.getSpace(1,1);
-        space.getWalls().add(Heading.WEST);
+        // ── Walls that enclose the east belt corridor (row 2) ──
+        board.getSpace(0, 2).getWalls().add(Heading.NORTH); // entry north lip
+        board.getSpace(3, 2).getWalls().add(Heading.SOUTH); // exit south lip
 
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.NORTH);
-        space.getActions().add(action);
+        // ── Walls guarding the north belt corridor (col 2) ──
+        board.getSpace(2, 3).getWalls().add(Heading.EAST);  // right guard
+        board.getSpace(3, 3).getWalls().add(Heading.NORTH); // top of blocked cell
 
-        space = board.getSpace(5,5);
-        space.getWalls().add(Heading.SOUTH);
+        // ── Walls guarding the west belt corridor (row 5) ──
+        board.getSpace(4, 5).getWalls().add(Heading.WEST);  // entry guard
+        board.getSpace(5, 5).getWalls().add(Heading.SOUTH); // original wall
+        board.getSpace(7, 5).getWalls().add(Heading.NORTH); // far end lip
 
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
+        // ── Walls for (1,1) ──
+        board.getSpace(1, 1).getWalls().add(Heading.SOUTH);
+        board.getSpace(1, 0).getWalls().add(Heading.NORTH);
+        board.getSpace(2, 1).getWalls().add(Heading.WEST);
 
-        space = board.getSpace(6,5);
+        // ── Extra scatter walls ──
+        board.getSpace(1, 3).getWalls().add(Heading.SOUTH);
+        board.getSpace(6, 1).getWalls().add(Heading.EAST);
+        board.getSpace(3, 4).getWalls().add(Heading.NORTH);
+        board.getSpace(4, 6).getWalls().add(Heading.SOUTH);
+        board.getSpace(6, 4).getWalls().add(Heading.SOUTH);
 
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
-        space.getActions().add(action);
+        // ── Checkpoints ──
+        board.getSpace(3, 1).getActions().add(new Checkpoint(1));
+        board.getSpace(6, 3).getActions().add(new Checkpoint(2));
+        board.getSpace(1, 6).getActions().add(new Checkpoint(3));
 
         return board;
     }

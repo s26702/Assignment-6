@@ -738,4 +738,308 @@ class GameControllerTest {
         Assertions.assertEquals(current, board.getSpace(3, 2).getPlayer(),
                 "Player should be moved one space east by the conveyor belt!");
     }
+
+    /**
+     * Verifies that canMove returns false when heading is null.
+     */
+    @Test
+    void testCanMoveNullHeading() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        current.setSpace(board.getSpace(2, 2));
+
+        boolean result = gameController.canMove(current, null);
+
+        Assertions.assertFalse(result,
+                "canMove should return false when heading is null.");
+    }
+
+    /**
+     * Verifies that moveForward does nothing when heading is null.
+     */
+    @Test
+    void testMoveForwardNullHeading() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        current.setSpace(board.getSpace(2, 2));
+
+        gameController.moveForward(current, null);
+
+        Assertions.assertEquals(current, board.getSpace(2, 2).getPlayer(),
+                "Player should not move when heading is null.");
+    }
+
+    /**
+     * Verifies that moveForward does nothing when player has no space.
+     */
+    @Test
+    void testMoveForwardNullSpace() {
+        Player current = gameController.board.getCurrentPlayer();
+        current.setSpace(null);
+
+        gameController.moveForward(current, Heading.NORTH);
+
+        Assertions.assertNull(current.getSpace(),
+                "Player should remain without space when moveForward is called.");
+    }
+
+    /**
+     * Verifies that moveForward is blocked by a wall.
+     */
+    @Test
+    void testMoveForwardBlockedByWall() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        current.setSpace(board.getSpace(2, 2));
+        current.setHeading(Heading.NORTH);
+        board.getSpace(2, 2).getWalls().add(Heading.NORTH);
+
+        gameController.moveForward(current, Heading.NORTH);
+
+        Assertions.assertEquals(current, board.getSpace(2, 2).getPlayer(),
+                "Player should not move when blocked by a wall.");
+    }
+
+    /**
+     * Verifies that fastForward stops after one step if second step is blocked.
+     */
+    @Test
+    void testFastForwardStopsAfterOneStep() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+
+        current.setSpace(board.getSpace(0, 0));
+        current.setHeading(Heading.EAST);
+
+        // Block second step
+        board.getSpace(1, 0).getWalls().add(Heading.EAST);
+
+        gameController.fastForward(current, Heading.EAST);
+
+        Assertions.assertEquals(current, board.getSpace(1, 0).getPlayer(),
+                "Player should only move one step when second step is blocked.");
+    }
+
+    /**
+     * Verifies that executePrograms does nothing when game is already finished.
+     */
+    @Test
+    void testExecuteProgramsDoesNothingWhenFinished() {
+        Board board = gameController.board;
+        gameController.finishGame(board.getPlayer(0));
+
+        gameController.executePrograms();
+
+        Assertions.assertEquals(Phase.FINISHED, board.getPhase(),
+                "Phase should remain FINISHED when executePrograms is called.");
+    }
+
+    /**
+     * Verifies that finishProgrammingPhase sets correct visibility of registers.
+     */
+    @Test
+    void testFinishProgrammingPhaseVisibility() {
+        Board board = gameController.board;
+        gameController.startProgrammingPhase();
+        gameController.finishProgrammingPhase();
+
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player player = board.getPlayer(i);
+
+            for (int j = 0; j < Player.NO_REGISTERS; j++) {
+                CommandCardField field = player.getProgramField(j);
+
+                if (j == 0) {
+                    Assertions.assertTrue(field.isVisible(),
+                            "Register 0 should be visible after finishProgrammingPhase.");
+                } else {
+                    Assertions.assertFalse(field.isVisible(),
+                            "Registers > 0 should be invisible after finishProgrammingPhase.");
+                }
+            }
+        }
+    }
+
+    /**
+     * Verifies that LEFT command card correctly turns the player.
+     */
+    @Test
+    void testExecuteCommandLeftCard() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        Player current = board.getPlayer(0);
+        current.setHeading(Heading.NORTH);
+        current.getProgramField(0).setCard(new CommandCard(Command.LEFT));
+
+        gameController.executeStep();
+
+        Assertions.assertEquals(Heading.WEST, current.getHeading(),
+                "Player should turn left from NORTH to WEST.");
+    }
+
+    /**
+     * Verifies that UTURN command card correctly reverses the player direction.
+     */
+    @Test
+    void testExecuteCommandUTurnCard() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        Player current = board.getPlayer(0);
+        current.setHeading(Heading.NORTH);
+        current.getProgramField(0).setCard(new CommandCard(Command.UTURN));
+
+        gameController.executeStep();
+
+        Assertions.assertEquals(Heading.SOUTH, current.getHeading(),
+                "Player should turn 180 degrees from NORTH to SOUTH.");
+    }
+
+    /**
+     * Verifies that executeStep can reach the defensive branch when called
+     * outside the ACTIVATION phase.
+     */
+    @Test
+    void testExecuteStepOutsideActivationPhase() {
+        Board board = gameController.board;
+
+        // Default phase after setup is not ACTIVATION
+        Assertions.assertDoesNotThrow(() -> gameController.executeStep(),
+                "executeStep should not crash even if called outside ACTIVATION phase.");
+    }
+
+    /**
+     * Verifies that executePrograms can reach the defensive branch when called
+     * outside the ACTIVATION phase.
+     */
+    @Test
+    void testExecuteProgramsOutsideActivationPhase() {
+        Board board = gameController.board;
+
+        Assertions.assertDoesNotThrow(() -> gameController.executePrograms(),
+                "executePrograms should not crash even if called outside ACTIVATION phase.");
+    }
+
+    /**
+     * Verifies that executeStep can reach the defensive branch for an invalid step.
+     */
+    @Test
+    void testExecuteStepWithInvalidNegativeStep() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        board.setStep(-1);
+
+        Assertions.assertDoesNotThrow(() -> gameController.executeStep(),
+                "executeStep should not crash when step is invalid.");
+    }
+
+    /**
+     * Verifies that executeStep can reach the defensive branch for a step beyond
+     * the number of registers.
+     */
+    @Test
+    void testExecuteStepWithStepTooLarge() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        board.setStep(Player.NO_REGISTERS);
+
+        Assertions.assertDoesNotThrow(() -> gameController.executeStep(),
+                "executeStep should not crash when step exceeds number of registers.");
+    }
+
+    /**
+     * Verifies that executeCommandOptionAndContinue can return to programming phase
+     * from the final player in the final register while not in step mode.
+     */
+    @Test
+    void testExecuteCommandOptionAndContinueLastRegisterNotStepMode() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        int lastRegister = Player.NO_REGISTERS - 1;
+        Player lastPlayer = board.getPlayer(board.getPlayersNumber() - 1);
+
+        board.setPhase(Phase.PLAYER_INTERACTION);
+        board.setCurrentPlayer(lastPlayer);
+        board.setStep(lastRegister);
+        board.setStepMode(false);
+
+        gameController.executeCommandOptionAndContinue(Command.RIGHT);
+
+        Assertions.assertEquals(Phase.PROGRAMMING, board.getPhase(),
+                "Game should return to programming phase after final register is resolved.");
+        Assertions.assertEquals(0, board.getStep(),
+                "Step should reset to 0 after restarting programming phase.");
+        Assertions.assertEquals(board.getPlayer(0), board.getCurrentPlayer(),
+                "Current player should reset to player 0 after restarting programming phase.");
+    }
+
+    /**
+     * Verifies that startProgrammingPhase initializes all card and program fields.
+     */
+    @Test
+    void testStartProgrammingPhaseInitializesEverything() {
+        Board board = gameController.board;
+
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player player = board.getPlayer(i);
+
+            for (int j = 0; j < Player.NO_REGISTERS; j++) {
+                player.getProgramField(j).setCard(new CommandCard(Command.FORWARD));
+                player.getProgramField(j).setVisible(false);
+            }
+
+            for (int j = 0; j < Player.NO_CARDS; j++) {
+                player.getCardField(j).setCard(null);
+                player.getCardField(j).setVisible(false);
+            }
+        }
+
+        gameController.startProgrammingPhase();
+
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player player = board.getPlayer(i);
+
+            for (int j = 0; j < Player.NO_REGISTERS; j++) {
+                Assertions.assertNull(player.getProgramField(j).getCard(),
+                        "Program fields should be cleared.");
+                Assertions.assertTrue(player.getProgramField(j).isVisible(),
+                        "Program fields should be visible.");
+            }
+
+            for (int j = 0; j < Player.NO_CARDS; j++) {
+                Assertions.assertNotNull(player.getCardField(j).getCard(),
+                        "Card fields should receive command cards.");
+                Assertions.assertTrue(player.getCardField(j).isVisible(),
+                        "Card fields should be visible.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that executeFieldActions handles players without a space and
+     * spaces without actions.
+     */
+    @Test
+    void testExecuteFieldActionsWithNullSpaceAndNoActions() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        board.getPlayer(0).setSpace(null);
+        board.getPlayer(1).setSpace(board.getSpace(4, 4));
+
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            board.getPlayer(i).getProgramField(0).setCard(new CommandCard(Command.RIGHT));
+        }
+
+        Assertions.assertDoesNotThrow(() -> {
+            for (int i = 0; i < board.getPlayersNumber(); i++) {
+                gameController.executeStep();
+            }
+        }, "Field actions should ignore null spaces and empty action lists.");
+    }
 }
