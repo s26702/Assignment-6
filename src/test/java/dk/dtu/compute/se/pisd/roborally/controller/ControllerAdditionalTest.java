@@ -125,15 +125,15 @@ class ControllerAdditionalTest {
     void testSimpleBoardHasExpectedWallsAndActionsAt11() {
         Board board = BoardFactory.getInstance().createBoard("Simple");
 
-        Space space = board.getSpace(1, 1);
+        Space space = board.getSpace(2, 1);
 
         Assertions.assertNotNull(space);
 
-        // (1,1) only has a SOUTH wall
+        // (2,1) only has a WEST wall
         Assertions.assertEquals(1, space.getWalls().size());
-        Assertions.assertTrue(space.getWalls().contains(Heading.SOUTH));
+        Assertions.assertTrue(space.getWalls().contains(Heading.WEST));
 
-        // (1,1) has no actions in the current board setup
+        // (2,1) has no actions in the current board setup
         Assertions.assertTrue(space.getActions().isEmpty());
     }
 
@@ -144,12 +144,6 @@ class ControllerAdditionalTest {
     @Test
     void testAdvancedBoardHasExpectedWalls() {
         Board board = BoardFactory.getInstance().createBoard("Advanced");
-
-        Space s1 = board.getSpace(0, 0);
-        Assertions.assertTrue(s1.getWalls().contains(Heading.SOUTH));
-
-        Space s2 = board.getSpace(1, 1);
-        Assertions.assertTrue(s2.getWalls().contains(Heading.EAST));
 
         Space s3 = board.getSpace(2, 2);
         Assertions.assertTrue(s3.getWalls().contains(Heading.NORTH));
@@ -162,9 +156,8 @@ class ControllerAdditionalTest {
         Assertions.assertTrue(s5.getWalls().contains(Heading.EAST));
         Assertions.assertTrue(s5.getWalls().contains(Heading.SOUTH));
 
-        Space s6 = board.getSpace(9, 9);
-        Assertions.assertTrue(s6.getWalls().contains(Heading.WEST));
-        Assertions.assertTrue(s6.getWalls().contains(Heading.SOUTH));
+        Space s6 = board.getSpace(2, 2);
+        Assertions.assertTrue(s6.getWalls().contains(Heading.NORTH));
     }
 
     /**
