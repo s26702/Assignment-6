@@ -142,7 +142,7 @@ public class Board extends Subject {
         }
     }
 
-    public Player getCurrentPlayer() {
+    public static Player getCurrentPlayer() {
         return current;
     }
 
