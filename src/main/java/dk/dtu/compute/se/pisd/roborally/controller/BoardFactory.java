@@ -77,7 +77,7 @@ public class BoardFactory {
      */
     private Board createDefaultBoard() {
         Board board = new Board(8, 8, "Simple");
-        
+
         for (int col = 0; col < 4; col++) {
             ConveyorBelt belt = new ConveyorBelt();
             belt.setHeading(Heading.EAST);
