@@ -1,12 +1,13 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import java.lang.reflect.Field;
 
 import java.util.List;
 
@@ -258,6 +259,7 @@ class ControllerAdditionalTest {
     /**
      * Tests that the checkpoint constructor throws an exception
      * when the checkpoint number is 0 or less.
+     * @author Mikkel Hjelm
      */
     @Test
     void testCheckpointConstructorThrowsExceptionForZero() {
@@ -268,6 +270,7 @@ class ControllerAdditionalTest {
     /**
      * Tests that the checkpoint number can be updated
      * and retrieved correctly using the setter and getter.
+     * @author Mikkel Hjelm
      */
     @Test
     void testCheckpointNumberGetterAndSetter() {
@@ -281,6 +284,7 @@ class ControllerAdditionalTest {
     /**
      * Tests that the last checkpoint
      * can be updated and retrieved correctly
+     * @author Mikkel Hjelm
      */
     @Test
     void testLastCheckpointGetterAndSetter() {
@@ -290,4 +294,56 @@ class ControllerAdditionalTest {
 
         Assertions.assertTrue(checkpoint.isLastCheckPoint());
     }
+
+    /**
+     * Tests that AppController reports no running game initially.
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testAppControllerIsGameRunningFalseInitially() {
+        RoboRally roboRally = new RoboRally();
+        AppController appController = new AppController(roboRally);
+
+        Assertions.assertFalse(appController.isGameRunning());
+    }
+
+    /**
+     * Tests that stopGame returns false when no game is running.
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testAppControllerStopGameFalseWhenNoGameRunning() {
+        RoboRally roboRally = new RoboRally();
+        AppController appController = new AppController(roboRally);
+
+        Assertions.assertFalse(appController.stopGame());
+    }
+
+
+    /**
+     * Tests that update performs no action and throws no exception.
+     * @author Mikkel Hjelm
+     */
+    @Test
+    void testAppControllerUpdateDoesNothing() {
+        RoboRally roboRally = new RoboRally();
+        AppController appController = new AppController(roboRally);
+
+        Assertions.assertDoesNotThrow(() -> appController.update(null));
+    }
+
+    /**
+     * Injects a GameController into AppController using reflection.
+     *
+     * @param controller the AppController
+     * @param gameController the GameController to inject
+     * @throws Exception if reflection fails
+     * @author Mikkel Hjelm
+     */
+    private void setGameController(AppController controller, GameController gameController) throws Exception {
+        Field field = AppController.class.getDeclaredField("gameController");
+        field.setAccessible(true);
+        field.set(controller, gameController);
+    }
 }
+
