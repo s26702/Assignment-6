@@ -27,10 +27,18 @@ import org.jetbrains.annotations.NotNull;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
- * ...
+ * Represents a player in the RoboRally game.
+ *
+ * A player belongs to exactly one {@link Board}, has a name, a color,
+ * a current position ({@link Space}), and a facing {@link Heading}.
+ * The player also owns a set of program registers and command cards
+ * used during the programming phase.
+ *
+ * The player tracks how many checkpoints have been reached during the game.
+ * Since this class extends {@link Subject}, observers are notified whenever
+ * important player attributes change.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class Player extends Subject {
 

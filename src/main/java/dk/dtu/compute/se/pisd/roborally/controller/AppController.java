@@ -44,10 +44,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ...
+ * Main application controller for RoboRally.
+ *
+ * This controller is responsible for high-level application flow such as
+ * starting new games, loading and saving games, stopping the current game,
+ * and exiting the application.
+ *
+ * It acts as the bridge between the {@link RoboRally} UI application and
+ * the currently active {@link GameController}.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class AppController implements Observer {
 

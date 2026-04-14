@@ -12,7 +12,6 @@ import java.util.List;
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  */
-// XXX A3: might be used for creating a first slightly more interesting board.
 public class BoardFactory {
 
     /**

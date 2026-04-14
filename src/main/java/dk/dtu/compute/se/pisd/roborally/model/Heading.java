@@ -22,10 +22,13 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
+ * Represents the four cardinal directions a player or board element
+ * can face in the RoboRally game.
+ *
+ * The enum also provides helper methods for rotating clockwise
+ * and counterclockwise between directions.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public enum Heading {
 

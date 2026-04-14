@@ -25,10 +25,12 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * Represents a single command card in the RoboRally game.
+ *
+ * A command card wraps a specific {@link Command} and is used by players
+ * during the programming phase to define robot actions.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class CommandCard extends Subject {
 

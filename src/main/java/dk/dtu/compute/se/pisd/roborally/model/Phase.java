@@ -22,10 +22,12 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
+ * Represents the different phases of a RoboRally game.
+ *
+ * The game progresses through these phases to control setup,
+ * programming, command execution, player interaction, and game end.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public enum Phase {
     INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION, FINISHED

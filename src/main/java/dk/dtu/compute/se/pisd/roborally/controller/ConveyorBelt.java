@@ -28,15 +28,13 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 
 /**
- * This class represents a conveyor belt on a space.
+ * Represents a conveyor belt field action on the RoboRally board.
+ *
+ * A conveyor belt automatically moves the player standing on its
+ * associated {@link Space} one step in the configured {@link Heading}.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
-// XXX A6b this class might give you some inspiration for
-//         implementing the class CheckPoint
-// XXX A6d remember to also implement the doAction method for the
-//         class CheckPoint you added in Assignment 6b
 public class ConveyorBelt extends FieldAction {
 
     private Heading heading;

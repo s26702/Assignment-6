@@ -24,10 +24,14 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 /**
- * ...
+ * Represents a single command card slot belonging to a player.
+ *
+ * A command card field can either be part of the player's hand
+ * or one of the program registers used during the programming phase.
+ * Each field may contain one {@link CommandCard} and has a visibility
+ * state that controls whether the card should be shown in the UI.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class CommandCardField extends Subject {
 
