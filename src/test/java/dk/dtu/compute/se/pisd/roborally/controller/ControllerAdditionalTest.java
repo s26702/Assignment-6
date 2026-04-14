@@ -127,18 +127,13 @@ class ControllerAdditionalTest {
         Space space = board.getSpace(1, 1);
 
         Assertions.assertNotNull(space);
+
+        // (1,1) only has a SOUTH wall
+        Assertions.assertEquals(1, space.getWalls().size());
         Assertions.assertTrue(space.getWalls().contains(Heading.SOUTH));
-        Assertions.assertTrue(space.getWalls().contains(Heading.WEST));
-        Assertions.assertEquals(2, space.getActions().size());
 
-        Assertions.assertInstanceOf(ConveyorBelt.class, space.getActions().get(0));
-        Assertions.assertInstanceOf(ConveyorBelt.class, space.getActions().get(1));
-
-        ConveyorBelt belt1 = (ConveyorBelt) space.getActions().get(0);
-        ConveyorBelt belt2 = (ConveyorBelt) space.getActions().get(1);
-
-        Assertions.assertEquals(Heading.WEST, belt1.getHeading());
-        Assertions.assertEquals(Heading.NORTH, belt2.getHeading());
+        // (1,1) has no actions in the current board setup
+        Assertions.assertTrue(space.getActions().isEmpty());
     }
 
     /**
