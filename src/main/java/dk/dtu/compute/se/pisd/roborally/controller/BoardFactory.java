@@ -153,12 +153,6 @@ public class BoardFactory {
             board.getSpace(col, 3).getActions().add(belt);
         }
 
-        for (int row = 4; row <= 6; row++) {
-            ConveyorBelt belt = new ConveyorBelt();
-            belt.setHeading(Heading.SOUTH);
-            board.getSpace(4, row).getActions().add(belt);
-        }
-
         for (int col = 3; col <= 7; col++) {
             ConveyorBelt belt = new ConveyorBelt();
             belt.setHeading(Heading.WEST);
