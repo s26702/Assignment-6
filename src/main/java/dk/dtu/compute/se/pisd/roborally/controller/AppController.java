@@ -77,7 +77,7 @@ public class AppController implements Observer {
                     return;
                 }
             }
-
+            //
             List<String> boardNames = BoardFactory.getInstance().getBoardNames();
             ChoiceDialog<String> boardDialog = new ChoiceDialog<>(boardNames.get(0), boardNames);
             boardDialog.setTitle("Board selection");
