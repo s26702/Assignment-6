@@ -142,7 +142,7 @@ public class Board extends Subject {
         }
     }
 
-    public static Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return current;
     }
 
@@ -233,6 +233,15 @@ public class Board extends Subject {
         return getSpace(x, y);
     }
 
+    /**
+     * Returns true if a wall blocks the movement of a player.
+     * (no walls or obstacles in either of the involved spaces); otherwise,
+     * null will be returned (this needs to be implemented for Assignment 6c).
+     *
+     * @param space the space for which the neighbour should be computed
+     * @param heading the heading of the neighbour
+     * @return the space in the given direction; null if there is no (reachable) neighbour
+     */
     public boolean getNieghborwall(@NotNull Space space, @NotNull Heading heading) {
         int x = space.x;
         int y = space.y;
@@ -240,28 +249,28 @@ public class Board extends Subject {
         switch (heading) {
             case NORTH:
                 Space neighbourN = getSpace(x, y - 1);
-                if (neighbourN != null && neighbourN.getWalls().contains(Heading.SOUTH)) {
+                if (neighbourN != null && neighbourN.getWalls().contains(Heading.SOUTH) || space.getWalls().contains(heading)) {
                     return true;
                 }
                 break;
 
             case SOUTH:
                 Space neighbourS = getSpace(x, y + 1);
-                if (neighbourS != null && neighbourS.getWalls().contains(Heading.NORTH)) {
+                if (neighbourS != null && neighbourS.getWalls().contains(Heading.NORTH)|| space.getWalls().contains(heading)) {
                     return true;
                 }
                 break;
 
             case WEST:
                 Space neighbourW = getSpace(x - 1, y);
-                if (neighbourW != null && neighbourW.getWalls().contains(Heading.EAST)) {
+                if (neighbourW != null && neighbourW.getWalls().contains(Heading.EAST)|| space.getWalls().contains(heading)) {
                     return true;
                 }
                 break;
 
             case EAST:
                 Space neighbourE = getSpace(x + 1, y);
-                if (neighbourE != null && neighbourE.getWalls().contains(Heading.WEST)) {
+                if (neighbourE != null && neighbourE.getWalls().contains(Heading.WEST)|| space.getWalls().contains(heading)) {
                     return true;
                 }
                 break;
