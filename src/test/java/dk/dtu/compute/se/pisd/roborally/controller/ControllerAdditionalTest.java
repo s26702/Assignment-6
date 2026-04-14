@@ -35,7 +35,7 @@ class ControllerAdditionalTest {
         Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
         gameController = new GameController(board);
         for (int i = 0; i < 6; i++) {
-            Player player = new Player(board, null,"Player " + i);
+            Player player = new Player(board, null, "Player " + i);
             board.addPlayer(player);
             player.setSpace(board.getSpace(i, i));
             player.setHeading(Heading.values()[i % Heading.values().length]);
@@ -204,6 +204,7 @@ class ControllerAdditionalTest {
 
         Assertions.assertTrue(checkpoint3.isLastCheckPoint());
     }
+
     /**
      * Verifies that the board factory exposes the expected
      * available board names.
@@ -226,6 +227,7 @@ class ControllerAdditionalTest {
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> names.add("TestBoard"));
     }
+
     /**
      * Ensures that checkpoint actions only affect players
      * currently occupying the checkpoint space.
@@ -233,7 +235,7 @@ class ControllerAdditionalTest {
     @Test
     void testCheckpointWithoutPlayerDoesNothing() {
         Checkpoint checkpoint1 = new Checkpoint(1);
-        Board  board = gameController.board;
+        Board board = gameController.board;
 
         board.getSpace(2, 2).getActions().add(checkpoint1);
         checkpoint1.doAction(gameController, board.getSpace(2, 2));
@@ -333,7 +335,7 @@ class ControllerAdditionalTest {
     /**
      * Injects a GameController into AppController using reflection.
      *
-     * @param controller the AppController
+     * @param controller     the AppController
      * @param gameController the GameController to inject
      * @throws Exception if reflection fails
      */
@@ -344,6 +346,10 @@ class ControllerAdditionalTest {
     }
 
 
+    /**
+     * Verifies that the board constructor correctly initializes board name,
+     * width, height, and step mode when a custom board name is provided.
+     */
     @Test
     void testBoardConstructorWithBoardName() {
         Board board = new Board(5, 6, "TestBoard");
@@ -354,6 +360,9 @@ class ControllerAdditionalTest {
         Assertions.assertFalse(board.isStepMode());
     }
 
+    /**
+     * Verifies that a game id can be assigned to a board and retrieved afterwards.
+     */
     @Test
     void testSetAndGetGameId() {
         Board board = new Board(5, 5);
@@ -363,6 +372,10 @@ class ControllerAdditionalTest {
         Assertions.assertEquals(10, board.getGameId());
     }
 
+    /**
+     * Verifies that setting the game id a second time to a different value
+     * throws an IllegalStateException.
+     */
     @Test
     void testSetGameIdTwiceWithDifferentValueThrowsException() {
         Board board = new Board(5, 5);
@@ -372,6 +385,9 @@ class ControllerAdditionalTest {
         Assertions.assertThrows(IllegalStateException.class, () -> board.setGameId(2));
     }
 
+    /**
+     * Verifies that getSpace returns null for coordinates outside the board boundaries.
+     */
     @Test
     void testGetSpaceReturnsNullOutsideBoard() {
         Board board = new Board(5, 5);
@@ -382,6 +398,9 @@ class ControllerAdditionalTest {
         Assertions.assertNull(board.getSpace(0, 5));
     }
 
+    /**
+     * Verifies that getPlayer returns null for invalid player indices.
+     */
     @Test
     void testGetPlayerReturnsNullForInvalidIndex() {
         Board board = new Board(5, 5);
@@ -390,6 +409,9 @@ class ControllerAdditionalTest {
         Assertions.assertNull(board.getPlayer(0));
     }
 
+    /**
+     * Verifies that setCurrentPlayer only accepts players that belong to the same board.
+     */
     @Test
     void testSetCurrentPlayerOnlyAcceptsPlayersOnBoard() {
         Board board = new Board(5, 5);
@@ -403,6 +425,9 @@ class ControllerAdditionalTest {
         Assertions.assertEquals(player1, board.getCurrentPlayer());
     }
 
+    /**
+     * Verifies that the board phase and step can be updated and retrieved correctly.
+     */
     @Test
     void testSetPhaseAndStep() {
         Board board = new Board(5, 5);
@@ -414,6 +439,9 @@ class ControllerAdditionalTest {
         Assertions.assertEquals(3, board.getStep());
     }
 
+    /**
+     * Verifies that step mode can be enabled on the board.
+     */
     @Test
     void testSetStepMode() {
         Board board = new Board(5, 5);
@@ -423,6 +451,9 @@ class ControllerAdditionalTest {
         Assertions.assertTrue(board.isStepMode());
     }
 
+    /**
+     * Verifies that getPlayerNumber returns -1 for a player that belongs to another board.
+     */
     @Test
     void testGetPlayerNumberReturnsMinusOneForPlayerFromDifferentBoard() {
         Board board1 = new Board(5, 5);
@@ -433,6 +464,10 @@ class ControllerAdditionalTest {
         Assertions.assertEquals(-1, board1.getPlayerNumber(player));
     }
 
+    /**
+     * Verifies that getNeighbour returns the correct adjacent space
+     * for each cardinal direction from a center space.
+     */
     @Test
     void testGetNeighbourReturnsCorrectNeighbour() {
         Board board = new Board(5, 5);
@@ -444,6 +479,10 @@ class ControllerAdditionalTest {
         Assertions.assertEquals(board.getSpace(3, 2), board.getNeighbour(center, Heading.EAST));
     }
 
+    /**
+     * Verifies that getNeighbour returns null when there is no neighbouring space
+     * because the current space lies on the board edge.
+     */
     @Test
     void testGetNeighbourReturnsNullAtBoardEdge() {
         Board board = new Board(5, 5);
@@ -453,6 +492,10 @@ class ControllerAdditionalTest {
         Assertions.assertNull(board.getNeighbour(corner, Heading.WEST));
     }
 
+    /**
+     * Verifies that neighbour wall detection returns true when the current space
+     * contains a wall in the queried direction.
+     */
     @Test
     void testNeighbourWallReturnsTrueWhenCurrentSpaceHasWall() {
         Board board = new Board(5, 5);
@@ -463,6 +506,10 @@ class ControllerAdditionalTest {
         Assertions.assertTrue(board.getNieghborwall(space, Heading.NORTH));
     }
 
+    /**
+     * Verifies that neighbour wall detection returns true when the neighbouring
+     * space contains a wall facing the opposite direction.
+     */
     @Test
     void testNeighbourWallReturnsTrueWhenNeighbourHasOppositeWall() {
         Board board = new Board(5, 5);
@@ -474,6 +521,10 @@ class ControllerAdditionalTest {
         Assertions.assertTrue(board.getNieghborwall(space, Heading.NORTH));
     }
 
+    /**
+     * Verifies that neighbour wall detection returns false when neither the current
+     * space nor the neighbouring space contains a blocking wall.
+     */
     @Test
     void testNeighbourWallReturnsFalseWhenNoWallsExist() {
         Board board = new Board(5, 5);
@@ -485,6 +536,10 @@ class ControllerAdditionalTest {
         Assertions.assertFalse(board.getNieghborwall(space, Heading.EAST));
     }
 
+    /**
+     * Verifies that the move counter starts at zero, increments correctly,
+     * and can be updated explicitly.
+     */
     @Test
     void testMoveCounterMethods() {
         Board board = new Board(5, 5);
@@ -501,6 +556,10 @@ class ControllerAdditionalTest {
         Assertions.assertEquals(10, board.getMoveCounter());
     }
 
+    /**
+     * Verifies that the status message during an ongoing game includes
+     * the current player, phase, and step number.
+     */
     @Test
     void testGetStatusMessageDuringGame() {
         Board board = new Board(5, 5);
@@ -518,6 +577,10 @@ class ControllerAdditionalTest {
         Assertions.assertTrue(status.contains("2"));
     }
 
+    /**
+     * Verifies that the status message after the game has finished includes
+     * the winner's name, a winning message, and the move count.
+     */
     @Test
     void testGetStatusMessageWhenFinished() {
         Board board = new Board(5, 5);
@@ -534,7 +597,4 @@ class ControllerAdditionalTest {
         Assertions.assertTrue(status.contains("won the game"));
         Assertions.assertTrue(status.contains("7"));
     }
-
-
 }
-
