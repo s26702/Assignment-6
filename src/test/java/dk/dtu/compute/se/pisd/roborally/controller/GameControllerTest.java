@@ -1,12 +1,9 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
 
 /**
  * Unit tests for the {@link GameController} class.
@@ -372,6 +369,4 @@ class GameControllerTest {
         Assertions.assertEquals(other, board.getSpace(0, board.height-1).getPlayer(),
                 "Other player should not be pushed off the board!");
     }
-
-
 }

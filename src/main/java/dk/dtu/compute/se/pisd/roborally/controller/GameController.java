@@ -300,7 +300,7 @@ public class GameController {
      * @return true if the player can move.
      * @author Mikkel Hjelm
      */
-    private boolean canMove(@NotNull Player player, Heading heading) {
+    boolean canMove(@NotNull Player player, Heading heading) {
         if(player.getSpace() == null || heading == null) {
             return false;
         }
