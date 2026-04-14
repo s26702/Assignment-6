@@ -738,4 +738,243 @@ class GameControllerTest {
         Assertions.assertEquals(current, board.getSpace(3, 2).getPlayer(),
                 "Player should be moved one space east by the conveyor belt!");
     }
+    // --- Board tests ---
+
+    @Test
+    void testGetSpaceOutOfBounds() {
+        Board board = gameController.board;
+
+        Assertions.assertNull(board.getSpace(-1, 0),
+                "getSpace should return null for negative x.");
+        Assertions.assertNull(board.getSpace(0, -1),
+                "getSpace should return null for negative y.");
+        Assertions.assertNull(board.getSpace(board.width, 0),
+                "getSpace should return null for x >= width.");
+        Assertions.assertNull(board.getSpace(0, board.height),
+                "getSpace should return null for y >= height.");
+    }
+
+    @Test
+    void testGetPlayerOutOfBounds() {
+        Board board = gameController.board;
+
+        Assertions.assertNull(board.getPlayer(-1),
+                "getPlayer should return null for negative index.");
+        Assertions.assertNull(board.getPlayer(board.getPlayersNumber()),
+                "getPlayer should return null for index >= player count.");
+    }
+
+    @Test
+    void testSetGameId() {
+        Board board = gameController.board;
+        board.setGameId(42);
+
+        Assertions.assertEquals(42, board.getGameId(),
+                "GameId should be set to 42.");
+    }
+
+    @Test
+    void testSetGameIdSameValueDoesNotThrow() {
+        Board board = gameController.board;
+        board.setGameId(42);
+
+        Assertions.assertDoesNotThrow(() -> board.setGameId(42),
+                "Setting the same gameId should not throw.");
+    }
+
+    @Test
+    void testSetGameIdDifferentValueThrows() {
+        Board board = gameController.board;
+        board.setGameId(42);
+
+        Assertions.assertThrows(IllegalStateException.class, () -> board.setGameId(99),
+                "Setting a different gameId should throw IllegalStateException.");
+    }
+
+    @Test
+    void testGetNeighbourNorth() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+
+        Assertions.assertEquals(board.getSpace(3, 2), board.getNeighbour(space, Heading.NORTH),
+                "Northern neighbour of (3,3) should be (3,2).");
+    }
+
+    @Test
+    void testGetNeighbourSouth() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+
+        Assertions.assertEquals(board.getSpace(3, 4), board.getNeighbour(space, Heading.SOUTH),
+                "Southern neighbour of (3,3) should be (3,4).");
+    }
+
+    @Test
+    void testGetNeighbourWest() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+
+        Assertions.assertEquals(board.getSpace(2, 3), board.getNeighbour(space, Heading.WEST),
+                "Western neighbour of (3,3) should be (2,3).");
+    }
+
+    @Test
+    void testGetNeighbourEast() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+
+        Assertions.assertEquals(board.getSpace(4, 3), board.getNeighbour(space, Heading.EAST),
+                "Eastern neighbour of (3,3) should be (4,3).");
+    }
+
+    @Test
+    void testGetNeighbourNorthEdge() {
+        Board board = gameController.board;
+        Space space = board.getSpace(0, 0);
+
+        Assertions.assertNull(board.getNeighbour(space, Heading.NORTH),
+                "Northern neighbour of (0,0) should be null — board edge.");
+    }
+
+    @Test
+    void testGetNeighbourSouthEdge() {
+        Board board = gameController.board;
+        Space space = board.getSpace(0, board.height - 1);
+
+        Assertions.assertNull(board.getNeighbour(space, Heading.SOUTH),
+                "Southern neighbour at bottom edge should be null.");
+    }
+
+    @Test
+    void testGetNeighbourWestEdge() {
+        Board board = gameController.board;
+        Space space = board.getSpace(0, 0);
+
+        Assertions.assertNull(board.getNeighbour(space, Heading.WEST),
+                "Western neighbour of (0,0) should be null — board edge.");
+    }
+
+    @Test
+    void testGetNeighbourEastEdge() {
+        Board board = gameController.board;
+        Space space = board.getSpace(board.width - 1, 0);
+
+        Assertions.assertNull(board.getNeighbour(space, Heading.EAST),
+                "Eastern neighbour at right edge should be null.");
+    }
+
+    @Test
+    void testGetNeighbourWallNorth() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+        space.getWalls().add(Heading.NORTH);
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.NORTH),
+                "Should detect wall on current space facing NORTH.");
+    }
+
+    @Test
+    void testGetNeighbourWallSouth() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+        space.getWalls().add(Heading.SOUTH);
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.SOUTH),
+                "Should detect wall on current space facing SOUTH.");
+    }
+
+    @Test
+    void testGetNeighbourWallWest() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+        space.getWalls().add(Heading.WEST);
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.WEST),
+                "Should detect wall on current space facing WEST.");
+    }
+
+    @Test
+    void testGetNeighbourWallEast() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+        space.getWalls().add(Heading.EAST);
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.EAST),
+                "Should detect wall on current space facing EAST.");
+    }
+
+    @Test
+    void testGetNeighbourWallOnNeighbourSouth() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+        board.getSpace(3, 4).getWalls().add(Heading.NORTH); // neighbour has wall facing back
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.SOUTH),
+                "Should detect wall on southern neighbour facing NORTH.");
+    }
+
+    @Test
+    void testGetNeighbourNoWall() {
+        Board board = gameController.board;
+        Space space = board.getSpace(3, 3);
+
+        Assertions.assertFalse(board.getNieghborwall(space, Heading.NORTH),
+                "Should return false when no wall blocks movement north.");
+    }
+
+    @Test
+    void testMoveCounter() {
+        Board board = gameController.board;
+        board.setCurrentPlayer(board.getPlayer(0));
+        board.getPlayer(0).setSpace(board.getSpace(0, 0));
+
+        int before = board.getMoveCounter();
+        gameController.moveCurrentPlayerToSpace(board.getSpace(5, 0));
+
+        Assertions.assertEquals(before + 1, board.getMoveCounter(),
+                "Move counter should increment by 1 after a successful move.");
+    }
+
+    @Test
+    void testSetMoveCounter() {
+        Board board = gameController.board;
+        board.setMoveCounter(10);
+
+        Assertions.assertEquals(10, board.getMoveCounter(),
+                "Move counter should be 10 after setMoveCounter(10).");
+    }
+
+    @Test
+    void testSetMoveCounterSameValueDoesNotNotify() {
+        Board board = gameController.board;
+        board.setMoveCounter(5);
+        board.setMoveCounter(5); // same value — should not notify
+
+        Assertions.assertEquals(5, board.getMoveCounter(),
+                "Move counter should remain 5.");
+    }
+
+    @Test
+    void testStatusMessageActivation() {
+        Board board = gameController.board;
+        gameController.finishProgrammingPhase();
+
+        String status = board.getStatusMessage();
+
+        Assertions.assertTrue(status.contains("Player"),
+                "Status message should contain player name during activation.");
+        Assertions.assertTrue(status.contains("ACTIVATION"),
+                "Status message should contain phase during activation.");
+    }
+
+    @Test
+    void testStatusMessageFinished() {
+        Board board = gameController.board;
+        gameController.finishGame(board.getPlayer(0));
+
+        String status = board.getStatusMessage();
+
+        Assertions.assertTrue(status.contains("won"),
+                "Status message should indicate winner when game is finished.");
+    }
 }
