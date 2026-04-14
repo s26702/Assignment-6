@@ -40,13 +40,25 @@ public class GameController {
 
     final public Board board;
 
+    /**
+     * Creates a new game controller for the given board.
+     * The controller uses the board as the central game state and
+     * operates directly on its players, spaces, phases, and steps.
+     *
+     * @param board the board whose game state is controlled by this controller
+     */
     public GameController(@NotNull Board board) {
         this.board = board;
     }
 
     /**
-     * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted!
+     * Moves the current player directly to the given space if the space is free.
+     * If the target space is already occupied by any player, the move is ignored.
+     * After a successful move, the move counter is incremented and the turn
+     * advances to the next player.
+     *
+     * This method is primarily a simple helper for testing and setup and does not
+     * represent the full RoboRally movement logic.
      *
      * @param space the space to which the current player should move
      */
@@ -73,7 +85,14 @@ public class GameController {
         board.setCurrentPlayer(board.getPlayer(Pnum % size));
     }
 
-
+    /**
+     * Starts the programming phase of the game.
+     * The phase is set to {@link Phase#PROGRAMMING}, the current player is reset
+     * to the first player, and the step counter is reset to 0.
+     *
+     * All program registers are cleared and made visible, and each player's card
+     * fields are filled with newly generated random command cards.
+     */
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -96,14 +115,23 @@ public class GameController {
         }
     }
 
-    // XXX A6c
+    /**
+     * Generates a random command card from the available command types.
+     *
+     * @return a randomly generated command card
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
         return new CommandCard(commands[random]);
     }
 
-    // XXX A6c
+    /**
+     * Ends the programming phase and starts the activation phase.
+     * All program fields are first hidden, and then the first register is made
+     * visible so that execution can begin. The current player and step counter
+     * are reset to the first player and first register.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -112,7 +140,12 @@ public class GameController {
         board.setStep(0);
     }
 
-    // XXX A6c
+    /**
+     * Makes the specified program register visible for all players.
+     * If the register index is outside the valid range, nothing happens.
+     *
+     * @param register the index of the program register to reveal
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -123,7 +156,10 @@ public class GameController {
         }
     }
 
-    // XXX A6c
+    /**
+     * Hides all program registers for all players.
+     * This is used when changing between programming and activation states.
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
@@ -134,28 +170,46 @@ public class GameController {
         }
     }
 
-    // XXX A6c
+    /**
+     * Executes all remaining programmed commands automatically.
+     * Step mode is disabled, and execution continues until the activation phase
+     * ends or the game enters a state that pauses execution.
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX A6c
+    /**
+     * Executes exactly one step of the current activation sequence.
+     * Step mode is enabled so that only a single step is processed before
+     * execution pauses again.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX A6c
+    /**
+     * Continues program execution while the game remains in activation phase
+     * and step mode is disabled.
+     * This method repeatedly executes individual steps until execution should stop.
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    // TODO A6e: implement the execution af an interactive card to
-    //     this method (e.g. by switching to the PLAYER_INTERACTION phase
-    //     at the right point)
+    /**
+     * Executes the next activation step in the current round.
+     * If the current command card is interactive, execution pauses by switching
+     * to {@link Phase#PLAYER_INTERACTION}. Otherwise, the command is executed
+     * and control advances to the next player or next register.
+     *
+     * If the final register has been completed for all players, the game returns
+     * to the programming phase for the next round.
+     */
     private void executeNextStep() {
         if (board.getPhase() == Phase.FINISHED) {
             return;
@@ -234,8 +288,12 @@ public class GameController {
     }
 
     /**
-     * Executes all field actions for all players after one register
-     * has been completed
+     * Executes all field actions for each player after a register has been completed.
+     * Any actions associated with the space a player is currently standing on are
+     * executed in the order they are stored on that space.
+     *
+     * Players without a current space are ignored.
+     *
      * @author Mikkel Hjelm
      */
     private void executeFieldActions() {
@@ -251,7 +309,18 @@ public class GameController {
         }
     }
 
-    // XXX A6c
+    /**
+     * Executes a single command for the given player.
+     * Supported commands include movement, rotation, and turning around.
+     * Interactive commands are not handled here directly, but through the
+     * activation flow that pauses execution and waits for player input.
+     *
+     * If the player is null, belongs to another board, or the command is null,
+     * the method does nothing.
+     *
+     * @param player the player whose command should be executed
+     * @param command the command to execute
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
@@ -295,10 +364,14 @@ public class GameController {
     /**
      * Checks whether the given player can move one step in the specified heading.
      * If the target space is occupied by another player, the method recursively
-     * checks wheter that player can also be moved in the same direction.
+     * checks whether that player can also be moved in the same direction.
+     *
+     * Movement is not possible if the player has no space, the heading is null,
+     * the next space does not exist, or a wall blocks movement.
+     *
      * @param player the player that attempts to move
      * @param heading the direction of the movement
-     * @return true if the player can move.
+     * @return true if the player can move; false otherwise
      * @author Mikkel Hjelm
      */
     boolean canMove(@NotNull Player player, Heading heading) {
@@ -328,6 +401,10 @@ public class GameController {
      * Moves a player one space forward in the given heading.
      * If another player occupies the target space, that player is moved first
      * in the same direction, creating a push chain.
+     *
+     * If movement is blocked by a wall, the edge of the board, or an immovable
+     * player chain, the method does nothing.
+     *
      * @param player the player to move
      * @param heading the direction of movement
      * @author Mikkel Hjelm
@@ -355,7 +432,14 @@ public class GameController {
         player.setSpace(next);
     }
 
-
+    /**
+     * Moves the player up to two spaces forward in the given heading.
+     * Each step is validated separately, so movement stops early if the second
+     * step is blocked.
+     *
+     * @param player the player to move
+     * @param heading the direction of movement
+     */
     public void fastForward(@NotNull Player player, Heading heading) {
         for (int i = 0; i < 2; i++) {
             if (canMove(player, heading)) {
@@ -366,14 +450,34 @@ public class GameController {
         }
     }
 
+    /**
+     * Rotates the player 90 degrees clockwise.
+     *
+     * @param player the player to rotate
+     */
     public void turnRight(@NotNull Player player) {
         player.setHeading(player.getHeading().next());
     }
 
+    /**
+     * Rotates the player 90 degrees counterclockwise.
+     *
+     * @param player the player to rotate
+     */
     public void turnLeft(@NotNull Player player) {
         player.setHeading(player.getHeading().prev());
     }
 
+    /**
+     * Moves the player one space backwards relative to their current heading.
+     * The player's heading is restored afterwards, so the player only changes
+     * position and not orientation.
+     *
+     * If backward movement is blocked, the method does nothing.
+     *
+     * @param player the player to move backwards
+     * @param heading the player's current heading
+     */
     public void moveBack(@NotNull Player player, Heading heading) {
         Heading NewHeading = heading.next().next();
         if(!canMove(player, NewHeading)) return;
@@ -383,12 +487,23 @@ public class GameController {
         uturn(player);
     }
 
+    /**
+     * Rotates the player 180 degrees.
+     *
+     * @param player the player to turn around
+     */
     public void uturn(@NotNull Player player) {
         player.setHeading(player.getHeading().next());
         player.setHeading(player.getHeading().next());
 
     }
 
+    /**
+     * Ends the game and declares the given player as the current player.
+     * The board phase is changed to {@link Phase#FINISHED}.
+     *
+     * @param player the player who has won the game
+     */
     public void finishGame(@NotNull Player player) {
         board.setCurrentPlayer(player);
         board.setPhase(Phase.FINISHED);
