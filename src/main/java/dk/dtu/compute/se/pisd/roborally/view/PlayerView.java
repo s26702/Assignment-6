@@ -1,5 +1,3 @@
-
-
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
@@ -17,26 +15,78 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A tab view for a single player.
+ *
+ * The player view displays the player's program registers, command cards,
+ * checkpoint status, and any interaction options that may be required during
+ * the game.
+ *
+ * @author Ekkart Kindler
+ */
 public class PlayerView extends Tab implements ViewObserver {
 
+    /**
+     * Label displaying the number of checkpoints reached by the player.
+     */
     private Label statusLabel;
 
+    /**
+     * The player associated with this view.
+     */
     private Player player;
 
+    /**
+     * Root container for the entire player tab content.
+     */
     private VBox top;
 
+    /**
+     * Label for the program register section.
+     */
     private Label programLabel;
+
+    /**
+     * Pane containing the program register card fields.
+     */
     private GridPane programPane;
+
+    /**
+     * Label for the command cards section.
+     */
     private Label cardsLabel;
+
+    /**
+     * Pane containing the available command cards.
+     */
     private GridPane cardsPane;
 
+    /**
+     * Visual representations of the player's program register fields.
+     */
     private CardFieldView[] programCardViews;
+
+    /**
+     * Visual representations of the player's available command card fields.
+     */
     private CardFieldView[] cardViews;
 
+    /**
+     * Panel containing buttons for player interaction choices.
+     */
     private VBox playerInteractionPanel;
 
+    /**
+     * The game controller used for handling user actions.
+     */
     private GameController gameController;
 
+    /**
+     * Creates a new player view for the given player.
+     *
+     * @param gameController the game controller responsible for game logic
+     * @param player the player shown in this tab
+     */
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
@@ -95,6 +145,14 @@ public class PlayerView extends Tab implements ViewObserver {
         }
     }
 
+    /**
+     * Updates the player view when the observed board changes.
+     *
+     * This method updates checkpoint information, register borders, and
+     * any player interaction buttons shown during the player interaction phase.
+     *
+     * @param subject the observed subject that triggered the update
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
