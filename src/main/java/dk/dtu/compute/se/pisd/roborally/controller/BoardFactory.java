@@ -104,8 +104,8 @@ public class BoardFactory {
         }
 
 
-        board.getSpace(0, 2).getWalls().add(Heading.NORTH);
-        board.getSpace(3, 2).getWalls().add(Heading.SOUTH);
+
+
 
         board.getSpace(2, 3).getWalls().add(Heading.EAST);
         board.getSpace(3, 3).getWalls().add(Heading.NORTH);
@@ -114,15 +114,15 @@ public class BoardFactory {
         board.getSpace(5, 5).getWalls().add(Heading.SOUTH);
         board.getSpace(7, 5).getWalls().add(Heading.NORTH);
 
-        board.getSpace(1, 1).getWalls().add(Heading.SOUTH);
-        board.getSpace(1, 0).getWalls().add(Heading.NORTH);
+
+
         board.getSpace(2, 1).getWalls().add(Heading.WEST);
 
         board.getSpace(1, 3).getWalls().add(Heading.SOUTH);
         board.getSpace(6, 1).getWalls().add(Heading.EAST);
-        board.getSpace(3, 4).getWalls().add(Heading.NORTH);
+
         board.getSpace(4, 6).getWalls().add(Heading.SOUTH);
-        board.getSpace(6, 4).getWalls().add(Heading.SOUTH);
+        board.getSpace(6, 5).getWalls().add(Heading.NORTH);
 
         board.getSpace(3, 1).getActions().add(new Checkpoint(1));
         board.getSpace(6, 3).getActions().add(new Checkpoint(2));
@@ -174,20 +174,19 @@ public class BoardFactory {
         board.getSpace(1, 7).getActions().add(trap2);
 
 
-        board.getSpace(0, 0).getWalls().add(Heading.SOUTH);
-        board.getSpace(1, 1).getWalls().add(Heading.EAST);
+
         board.getSpace(2, 2).getWalls().add(Heading.NORTH);
 
-        board.getSpace(0, 3).getWalls().add(Heading.NORTH);
+
         board.getSpace(1, 3).getWalls().add(Heading.SOUTH);
         board.getSpace(3, 3).getWalls().add(Heading.NORTH);
         board.getSpace(4, 3).getWalls().add(Heading.SOUTH);
 
-        board.getSpace(4, 4).getWalls().add(Heading.EAST);
+
         board.getSpace(4, 5).getWalls().add(Heading.WEST);
 
         board.getSpace(3, 6).getWalls().add(Heading.SOUTH);
-        board.getSpace(5, 6).getWalls().add(Heading.NORTH);
+        board.getSpace(5, 5).getWalls().add(Heading.SOUTH);
         board.getSpace(7, 6).getWalls().add(Heading.EAST);
 
         board.getSpace(5, 4).getWalls().add(Heading.NORTH);
@@ -197,9 +196,9 @@ public class BoardFactory {
 
         board.getSpace(8, 2).getWalls().add(Heading.NORTH);
         board.getSpace(8, 2).getWalls().add(Heading.EAST);
-        board.getSpace(9, 3).getWalls().add(Heading.WEST);
+        board.getSpace(8, 3).getWalls().add(Heading.EAST);
 
-        board.getSpace(1, 8).getWalls().add(Heading.SOUTH);
+        board.getSpace(1, 9).getWalls().add(Heading.NORTH);
         board.getSpace(2, 8).getWalls().add(Heading.EAST);
         board.getSpace(2, 9).getWalls().add(Heading.NORTH);
 
@@ -207,7 +206,7 @@ public class BoardFactory {
         board.getSpace(6, 1).getWalls().add(Heading.EAST);
         board.getSpace(8, 7).getWalls().add(Heading.NORTH);
         board.getSpace(9, 9).getWalls().add(Heading.WEST);
-        board.getSpace(9, 9).getWalls().add(Heading.SOUTH);
+
 
         Checkpoint checkpoint1 = new Checkpoint(1);
         board.getSpace(8, 1).getActions().add(checkpoint1);
