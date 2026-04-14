@@ -76,7 +76,7 @@ public class BoardFactory {
      * @return a simple Board configuration
      */
     private Board createDefaultBoard() {
-        Board board = new Board(8, 8, "Factory Floor");
+        Board board = new Board(8, 8, "Simple");
 
         // ── Conveyor corridor: row 2, cols 0–3 → EAST ──
         for (int col = 0; col < 4; col++) {
