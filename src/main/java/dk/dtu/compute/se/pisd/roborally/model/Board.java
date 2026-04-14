@@ -235,8 +235,8 @@ public class Board extends Subject {
 
     /**
      * Returns true if a wall blocks the movement of a player.
-     * (no walls or obstacles in either of the involved spaces); otherwise,
-     * null will be returned (this needs to be implemented for Assignment 6c).
+     * (no walls in either of the involved spaces); otherwise,
+     * True will be returned if there's a wall blocking the path.
      *
      * @param space the space for which the neighbour should be computed
      * @param heading the heading of the neighbour
