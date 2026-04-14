@@ -160,7 +160,8 @@ public class GameController {
         if (board.getPhase() == Phase.FINISHED) {
             return;
         }
-       Player currentPlayer = board.getCurrentPlayer();
+
+        Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
@@ -188,12 +189,10 @@ public class GameController {
                     }
                 }
             } else {
-                // this should not happen
-                assert false;
+                return;
             }
         } else {
-            // this should not happen
-            assert false;
+            return;
         }
     }
 
