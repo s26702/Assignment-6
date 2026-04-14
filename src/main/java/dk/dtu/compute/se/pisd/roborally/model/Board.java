@@ -199,7 +199,7 @@ public class Board extends Subject {
      * The neighbour is returned only, if it can be reached from the given space
      * (no walls or obstacles in either of the involved spaces); otherwise,
      * null will be returned (this needs to be implemented for Assignment 6c).
-     *
+     * We interpretate the borders of the game to behave like walls.
      * @param space the space for which the neighbour should be computed
      * @param heading the heading of the neighbour
      * @return the space in the given direction; null if there is no (reachable) neighbour
