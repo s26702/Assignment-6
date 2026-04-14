@@ -145,22 +145,26 @@ class ControllerAdditionalTest {
     void testAdvancedBoardHasExpectedWalls() {
         Board board = BoardFactory.getInstance().createBoard("Advanced");
 
-        Space s1 = board.getSpace(2, 2);
-        Assertions.assertTrue(s1.getWalls().contains(Heading.NORTH));
-        Assertions.assertTrue(s1.getWalls().contains(Heading.WEST));
+        Space s1 = board.getSpace(0, 0);
+        Assertions.assertTrue(s1.getWalls().contains(Heading.SOUTH));
 
-        Space s2 = board.getSpace(5, 3);
-        Assertions. assertTrue(s2.getWalls().contains(Heading.NORTH));
-        Assertions.assertTrue(s2.getWalls().contains(Heading.WEST));
+        Space s2 = board.getSpace(1, 1);
+        Assertions.assertTrue(s2.getWalls().contains(Heading.EAST));
 
-        Space s3 = board.getSpace(8, 6);
+        Space s3 = board.getSpace(2, 2);
         Assertions.assertTrue(s3.getWalls().contains(Heading.NORTH));
-        Assertions.assertTrue(s3.getWalls().contains(Heading.SOUTH));
 
-        Space s4 = board.getSpace(3, 9);
-        Assertions.assertTrue(s4.getWalls().contains(Heading.EAST));
+        Space s4 = board.getSpace(5, 4);
+        Assertions.assertTrue(s4.getWalls().contains(Heading.NORTH));
         Assertions.assertTrue(s4.getWalls().contains(Heading.WEST));
-        Assertions.assertTrue(s4.getWalls().contains(Heading.SOUTH));
+
+        Space s5 = board.getSpace(6, 5);
+        Assertions.assertTrue(s5.getWalls().contains(Heading.EAST));
+        Assertions.assertTrue(s5.getWalls().contains(Heading.SOUTH));
+
+        Space s6 = board.getSpace(9, 9);
+        Assertions.assertTrue(s6.getWalls().contains(Heading.WEST));
+        Assertions.assertTrue(s6.getWalls().contains(Heading.SOUTH));
     }
 
     /**
@@ -171,17 +175,22 @@ class ControllerAdditionalTest {
     void testAdvancedBoardHasExpectedConveyorBelts() {
         Board board = BoardFactory.getInstance().createBoard("Advanced");
 
-        ConveyorBelt belt1 = (ConveyorBelt) board.getSpace(1, 1).getActions().get(0);
-        ConveyorBelt belt2 = (ConveyorBelt) board.getSpace(4, 1).getActions().get(0);
-        ConveyorBelt belt3 = (ConveyorBelt) board.getSpace(7, 4).getActions().get(0);
-        ConveyorBelt belt4 = (ConveyorBelt) board.getSpace(8, 8).getActions().get(0);
-        ConveyorBelt belt5 = (ConveyorBelt) board.getSpace(3, 6).getActions().get(0);
+        ConveyorBelt belt1 = (ConveyorBelt) board.getSpace(0, 3).getActions().get(0);
+        ConveyorBelt belt2 = (ConveyorBelt) board.getSpace(4, 3).getActions().get(0);
+        ConveyorBelt belt3 = (ConveyorBelt) board.getSpace(3, 6).getActions().get(0);
+        ConveyorBelt belt4 = (ConveyorBelt) board.getSpace(7, 2).getActions().get(0);
+        ConveyorBelt belt5 = (ConveyorBelt) board.getSpace(9, 8).getActions().get(0);
+        ConveyorBelt belt6 = (ConveyorBelt) board.getSpace(1, 7).getActions().get(0);
 
         Assertions.assertEquals(Heading.EAST, belt1.getHeading());
-        Assertions.assertEquals(Heading.SOUTH, belt2.getHeading());
+        Assertions.assertEquals(Heading.EAST, belt2.getHeading());
+
         Assertions.assertEquals(Heading.WEST, belt3.getHeading());
+
         Assertions.assertEquals(Heading.SOUTH, belt4.getHeading());
-        Assertions.assertEquals(Heading.EAST, belt5.getHeading());
+
+        Assertions.assertEquals(Heading.NORTH, belt5.getHeading());
+        Assertions.assertEquals(Heading.EAST, belt6.getHeading());
     }
 
     /**
@@ -189,15 +198,19 @@ class ControllerAdditionalTest {
      * spaces of the advanced board.
      */
     @Test
-    void testAdvancedBoardHasCheckpointsAtExpectedPositions() {
+    void testAdvancedBoardHasCheckpoints() {
         Board board = BoardFactory.getInstance().createBoard("Advanced");
 
-        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(4, 4).getActions().get(0));
-        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(6, 6).getActions().get(0));
-        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(5, 9).getActions().get(0));
-        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(8, 7).getActions().get(0));
-    }
+        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(8, 1).getActions().get(0));
+        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(5, 5).getActions().get(0));
+        Assertions.assertInstanceOf(Checkpoint.class, board.getSpace(1, 9).getActions().get(0));
 
+        Checkpoint checkpoint1 = (Checkpoint) board.getSpace(8, 1).getActions().get(0);
+        Checkpoint checkpoint2 = (Checkpoint) board.getSpace(5, 5).getActions().get(0);
+        Checkpoint checkpoint3 = (Checkpoint) board.getSpace(1, 9).getActions().get(0);
+
+        Assertions.assertTrue(checkpoint3.isLastCheckPoint());
+    }
     /**
      * Verifies that the board factory exposes the expected
      * available board names.
