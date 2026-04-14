@@ -345,5 +345,199 @@ class ControllerAdditionalTest {
         field.setAccessible(true);
         field.set(controller, gameController);
     }
+
+
+    @Test
+    void testBoardConstructorWithBoardName() {
+        Board board = new Board(5, 6, "TestBoard");
+
+        Assertions.assertEquals("TestBoard", board.boardName);
+        Assertions.assertEquals(5, board.width);
+        Assertions.assertEquals(6, board.height);
+        Assertions.assertFalse(board.isStepMode());
+    }
+
+    @Test
+    void testSetAndGetGameId() {
+        Board board = new Board(5, 5);
+
+        board.setGameId(10);
+
+        Assertions.assertEquals(10, board.getGameId());
+    }
+
+    @Test
+    void testSetGameIdTwiceWithDifferentValueThrowsException() {
+        Board board = new Board(5, 5);
+
+        board.setGameId(1);
+
+        Assertions.assertThrows(IllegalStateException.class, () -> board.setGameId(2));
+    }
+
+    @Test
+    void testGetSpaceReturnsNullOutsideBoard() {
+        Board board = new Board(5, 5);
+
+        Assertions.assertNull(board.getSpace(-1, 0));
+        Assertions.assertNull(board.getSpace(0, -1));
+        Assertions.assertNull(board.getSpace(5, 0));
+        Assertions.assertNull(board.getSpace(0, 5));
+    }
+
+    @Test
+    void testGetPlayerReturnsNullForInvalidIndex() {
+        Board board = new Board(5, 5);
+
+        Assertions.assertNull(board.getPlayer(-1));
+        Assertions.assertNull(board.getPlayer(0));
+    }
+
+    @Test
+    void testSetCurrentPlayerOnlyAcceptsPlayersOnBoard() {
+        Board board = new Board(5, 5);
+        Player player1 = new Player(board, null, "P1");
+        Player player2 = new Player(new Board(5, 5), null, "P2");
+
+        board.addPlayer(player1);
+        board.setCurrentPlayer(player1);
+        board.setCurrentPlayer(player2);
+
+        Assertions.assertEquals(player1, board.getCurrentPlayer());
+    }
+
+    @Test
+    void testSetPhaseAndStep() {
+        Board board = new Board(5, 5);
+
+        board.setPhase(Phase.PROGRAMMING);
+        board.setStep(3);
+
+        Assertions.assertEquals(Phase.PROGRAMMING, board.getPhase());
+        Assertions.assertEquals(3, board.getStep());
+    }
+
+    @Test
+    void testSetStepMode() {
+        Board board = new Board(5, 5);
+
+        board.setStepMode(true);
+
+        Assertions.assertTrue(board.isStepMode());
+    }
+
+    @Test
+    void testGetPlayerNumberReturnsMinusOneForPlayerFromDifferentBoard() {
+        Board board1 = new Board(5, 5);
+        Board board2 = new Board(5, 5);
+
+        Player player = new Player(board2, null, "OtherPlayer");
+
+        Assertions.assertEquals(-1, board1.getPlayerNumber(player));
+    }
+
+    @Test
+    void testGetNeighbourReturnsCorrectNeighbour() {
+        Board board = new Board(5, 5);
+        Space center = board.getSpace(2, 2);
+
+        Assertions.assertEquals(board.getSpace(2, 1), board.getNeighbour(center, Heading.NORTH));
+        Assertions.assertEquals(board.getSpace(2, 3), board.getNeighbour(center, Heading.SOUTH));
+        Assertions.assertEquals(board.getSpace(1, 2), board.getNeighbour(center, Heading.WEST));
+        Assertions.assertEquals(board.getSpace(3, 2), board.getNeighbour(center, Heading.EAST));
+    }
+
+    @Test
+    void testGetNeighbourReturnsNullAtBoardEdge() {
+        Board board = new Board(5, 5);
+        Space corner = board.getSpace(0, 0);
+
+        Assertions.assertNull(board.getNeighbour(corner, Heading.NORTH));
+        Assertions.assertNull(board.getNeighbour(corner, Heading.WEST));
+    }
+
+    @Test
+    void testNeighbourWallReturnsTrueWhenCurrentSpaceHasWall() {
+        Board board = new Board(5, 5);
+        Space space = board.getSpace(2, 2);
+
+        space.getWalls().add(Heading.NORTH);
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.NORTH));
+    }
+
+    @Test
+    void testNeighbourWallReturnsTrueWhenNeighbourHasOppositeWall() {
+        Board board = new Board(5, 5);
+        Space space = board.getSpace(2, 2);
+        Space northNeighbour = board.getSpace(2, 1);
+
+        northNeighbour.getWalls().add(Heading.SOUTH);
+
+        Assertions.assertTrue(board.getNieghborwall(space, Heading.NORTH));
+    }
+
+    @Test
+    void testNeighbourWallReturnsFalseWhenNoWallsExist() {
+        Board board = new Board(5, 5);
+        Space space = board.getSpace(2, 2);
+
+        Assertions.assertFalse(board.getNieghborwall(space, Heading.NORTH));
+        Assertions.assertFalse(board.getNieghborwall(space, Heading.SOUTH));
+        Assertions.assertFalse(board.getNieghborwall(space, Heading.WEST));
+        Assertions.assertFalse(board.getNieghborwall(space, Heading.EAST));
+    }
+
+    @Test
+    void testMoveCounterMethods() {
+        Board board = new Board(5, 5);
+
+        Assertions.assertEquals(0, board.getMoveCounter());
+
+        board.IncMovecounter();
+        board.IncMovecounter();
+
+        Assertions.assertEquals(2, board.getMoveCounter());
+
+        board.setMoveCounter(10);
+
+        Assertions.assertEquals(10, board.getMoveCounter());
+    }
+
+    @Test
+    void testGetStatusMessageDuringGame() {
+        Board board = new Board(5, 5);
+        Player player = new Player(board, null, "Tester");
+
+        board.addPlayer(player);
+        board.setCurrentPlayer(player);
+        board.setPhase(Phase.PROGRAMMING);
+        board.setStep(2);
+
+        String status = board.getStatusMessage();
+
+        Assertions.assertTrue(status.contains("Tester"));
+        Assertions.assertTrue(status.contains("PROGRAMMING"));
+        Assertions.assertTrue(status.contains("2"));
+    }
+
+    @Test
+    void testGetStatusMessageWhenFinished() {
+        Board board = new Board(5, 5);
+        Player player = new Player(board, null, "Winner");
+
+        board.addPlayer(player);
+        board.setCurrentPlayer(player);
+        board.setPhase(Phase.FINISHED);
+        board.setMoveCounter(7);
+
+        String status = board.getStatusMessage();
+
+        Assertions.assertTrue(status.contains("Winner"));
+        Assertions.assertTrue(status.contains("won the game"));
+        Assertions.assertTrue(status.contains("7"));
+    }
+
+
 }
 
